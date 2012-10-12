@@ -13,7 +13,7 @@ public class TranslationLayer : MonoBehaviour {
 
     //lists to be kept in memory
     
-#region Global Variables
+    #region GameObject Variables
 
     /// <summary>
     /// Name of the GameObject to which ZigSkeleton script is attached
@@ -33,10 +33,23 @@ public class TranslationLayer : MonoBehaviour {
     public static string zigfuGameObjectName = "ZigFu";
 
     /// <summary>
+    /// Name of the gameobject which handles all system sounds
+    /// </summary>
+    public static string soundGameObjectName = "Sounds";
+
+    /// <summary>
+    /// Declares the sound gameObject, since there is only one for the whole script
+    /// </summary>
+    public SoundScript systemSounds;
+
+    /// <summary>
     /// Name of the GameObject to which GUIText is attached
     /// </summary>
     public static string InfoTextGameObjectName = "InfoText";
 
+    #endregion
+
+    #region Generic Global Variables
     /// <summary>
     /// Flags true if the gestureRecognitionClone is created
     /// </summary>
@@ -204,22 +217,6 @@ public class TranslationLayer : MonoBehaviour {
     /// Time allowed for each exercise
     /// </summary>
     public double gestureTime = 10;
-
-    #endregion
-
-    #region sound related variables
-
-    /// <summary>
-    /// Class which encapsulates 
-    /// </summary>
-    [System.Serializable]
-    public class SoundVariables
-    {
-        public AudioClip soundOnSuccesfulGesture;
-        public AudioClip soundOnFailedGesture;
-    }
-
-    public SoundVariables systemSounds;
 
     #endregion
 
@@ -672,7 +669,7 @@ public class TranslationLayer : MonoBehaviour {
 
         exerciseScore++; //add to score
 
-        audio.PlayOneShot(systemSounds.soundOnSuccesfulGesture); //play the sound
+        systemSounds.PlayGestureSuccessSound(); //play the sound
 
         //advance to next keypoint
         Debug.Log("Gesture Succesful! " + currentKeyPoint + " " + indicatorModelKeyPoint);
@@ -713,7 +710,7 @@ public class TranslationLayer : MonoBehaviour {
 
         feedbackText1.text = "Gesture Not held succesfully, moving on";
 
-        audio.PlayOneShot(systemSounds.soundOnFailedGesture); //play sound
+        systemSounds.PlayGestureFailSound(); //play sound
 
 
         if (currentKeyPoint < keypointsList.Count - 1)
@@ -762,6 +759,9 @@ public class TranslationLayer : MonoBehaviour {
         textIn =
             GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
             .GUIOutputText2;
+
+        //Declare the SoundScript
+        systemSounds = GameObject.Find(soundGameObjectName).GetComponent<SoundScript>();
 
         feedbackText2.text = textIn;
 
@@ -839,6 +839,11 @@ public class TranslationLayer : MonoBehaviour {
 
     #endregion
 
+#region Sound related methods
+
+
+
+#endregion
 
     // Use this for initialization
 void Start () {
@@ -851,6 +856,10 @@ void Start () {
         demoCountdownTimer = new mySimpleTimer.SimpleCountdownTimer();
         demoCountdownTimer.StartMethod(demoDelay,
             new mySimpleTimer.SimpleCountdownTimer.TimerEventHandler(NextGesture));
+
+        systemSounds =
+            GameObject.Find(soundGameObjectName).GetComponent<SoundScript>();
+        
         
 	}
 	

@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ButtonScript.cs" />
      <Compile Include="Assets\Scripts\SerializeScript.cs" />
+     <Compile Include="Assets\Scripts\SoundScript.cs" />
      <Compile Include="Assets\Scripts\TranslationLayer.cs" />
      <Compile Include="Assets\Scripts\myGUIControls.cs" />
      <Compile Include="Assets\Scripts\mySimpleTimer.cs" />

@@ -8,3 +8,13 @@ C:\Users\adeeshaek\Documents\Unity Research Game\obj\Debug\ResolveAssemblyRefere
 C:\Users\adeeshaek\Documents\Unity Research Game\obj\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\adeeshaek\Documents\Unity Research Game\obj\Debug\Assembly-CSharp-firstpass.pdb
 C:\Users\adeeshaek\Documents\Unity Research Game\Temp\bin\Debug\Assembly-CSharp-firstpass.XML
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\OpenNI.Net.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\UnityEditor.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\UnityEngine.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\ZDK.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\Temp\bin\Debug\nunit.framework.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\adeeshaek\Documents\GitHub\Kinect-Project\Unity Research Game\obj\Debug\Assembly-CSharp-firstpass.pdb
