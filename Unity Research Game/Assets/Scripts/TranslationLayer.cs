@@ -67,7 +67,7 @@ public class TranslationLayer : MonoBehaviour {
 
 #endregion
 
-#region gesture tracking sensitivity variables
+    #region gesture tracking sensitivity variables
 
     /// <summary>
     /// This measures the sensitivity of the gesture recognition system. 
@@ -204,6 +204,22 @@ public class TranslationLayer : MonoBehaviour {
     /// Time allowed for each exercise
     /// </summary>
     public double gestureTime = 10;
+
+    #endregion
+
+    #region sound related variables
+
+    /// <summary>
+    /// Class which encapsulates 
+    /// </summary>
+    [System.Serializable]
+    public class SoundVariables
+    {
+        public AudioClip soundOnSuccesfulGesture;
+        public AudioClip soundOnFailedGesture;
+    }
+
+    public SoundVariables systemSounds;
 
     #endregion
 
@@ -454,7 +470,7 @@ public class TranslationLayer : MonoBehaviour {
 
 #endregion
 
-    #region Gesture tracking methods
+#region Gesture tracking methods
 
     /// <summary>
     /// Checks if current posture matches the one of the keypoint passed in
@@ -645,6 +661,8 @@ public class TranslationLayer : MonoBehaviour {
     ///     CheckForGesture will calculate a score of how accurately the pose was held.
     ///     If the accuracy is greater than gestureAccuracy this method is called.
     ///     
+    /// This method also plays a sound, systemSounds.soundOnSuccesfulGesture
+    ///     
     /// This method advances the current keyPoint to the next, and shows that the player
     ///     succesfully did a part of an exercise
     /// </summary>
@@ -653,6 +671,8 @@ public class TranslationLayer : MonoBehaviour {
         feedbackText1.text = "Succesful Gesture!";
 
         exerciseScore++; //add to score
+
+        audio.PlayOneShot(systemSounds.soundOnSuccesfulGesture); //play the sound
 
         //advance to next keypoint
         Debug.Log("Gesture Succesful! " + currentKeyPoint + " " + indicatorModelKeyPoint);
@@ -681,6 +701,8 @@ public class TranslationLayer : MonoBehaviour {
     /// If the timer reaches 0 and the pose is not succesfully held, 
     ///     this method is called. 
     ///     
+    /// The method also plays a sound - systemSounds.soundOnFailedGesture
+    /// 
     /// This method has to do the same as GestureHeldEvent except that
     ///     it says gesture not held.
     /// </summary>
@@ -690,6 +712,8 @@ public class TranslationLayer : MonoBehaviour {
         Debug.Log("Not succesful " + currentKeyPoint + " " + indicatorModelKeyPoint);
 
         feedbackText1.text = "Gesture Not held succesfully, moving on";
+
+        audio.PlayOneShot(systemSounds.soundOnFailedGesture); //play sound
 
 
         if (currentKeyPoint < keypointsList.Count - 1)
@@ -744,7 +768,7 @@ public class TranslationLayer : MonoBehaviour {
     }
     #endregion
 
-    #region animation related methods
+#region animation related methods
 
     /// <summary>
     /// This method smoothly animates the indicator model as per the animation recorded by the
@@ -776,7 +800,7 @@ public class TranslationLayer : MonoBehaviour {
 
     #endregion
 
-    #region timing related methods
+#region timing related methods
 
     /// <summary>
     /// This event handler is called if the countdown timer reaches 0
@@ -817,7 +841,7 @@ public class TranslationLayer : MonoBehaviour {
 
 
     // Use this for initialization
-	void Start () {
+void Start () {
 
         //init the countdown timers
         countdownTimer = new mySimpleTimer.SimpleCountdownTimer();
@@ -831,11 +855,12 @@ public class TranslationLayer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        countdownTimer.UpdateMethod();
-        demoCountdownTimer.UpdateMethod();
-        feedbackText2.text = countdownTimer.GetRemainingTime().ToString();
-	}
+void Update()
+{
+    countdownTimer.UpdateMethod();
+    demoCountdownTimer.UpdateMethod();
+    feedbackText2.text = countdownTimer.GetRemainingTime().ToString();
+}
 
     /// <summary>
     /// Unity specific event, which is fired regularly.
