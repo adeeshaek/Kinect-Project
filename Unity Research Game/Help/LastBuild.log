@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shfbBuild product="Sandcastle Help File Builder" version="1.9.4.0" projectFile="C:\Users\adeeshaek\Documents\Unity Research Game\Helps.shfbproj" started="8/14/2012 11:43:26 PM">
+<buildStep step="Initializing">
+</buildStep>
+<buildStep step="ClearWorkFolder">
+Clearing working folder...
+</buildStep>
+<buildStep step="FindingTools">
+Finding tools...
+Found Sandcastle tools in &#39;C:\Program Files (x86)\Sandcastle\&#39;
+Searching for HTML Help 1 compiler...
+Found HTML Help 1 compiler in &#39;C:\Program Files (x86)\HTML Help Workshop\&#39;
+</buildStep>
+<buildStep step="ValidatingDocumentationSources">
+Validating and copying documentation source information
+Source: C:\Users\adeeshaek\Documents\Unity Research Game\Assembly-CSharp.csproj
+    Found project &#39;C:\Users\adeeshaek\Documents\Unity Research Game\Assembly-CSharp.csproj&#39;
+Source: C:\Users\adeeshaek\Documents\Unity Research Game\Assembly-CSharp-firstpass.csproj
+    Found project &#39;C:\Users\adeeshaek\Documents\Unity Research Game\Assembly-CSharp-firstpass.csproj&#39;
+
+Parsing project files
+    Last step completed in 00:00:00.0190
+</buildStep>
+<buildStep step="Failed">
+
+SHFB: Error BE0040: Project assembly does not exist: C:\Users\adeeshaek\Documents\Unity Research Game\Temp\bin\Debug\Assembly-CSharp.dll
+
+</buildStep>
+</shfbBuild>

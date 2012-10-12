@@ -1,0 +1,5 @@
+ChangeLog
+--------
+8/17/2012
+
+Reduced the size of XML

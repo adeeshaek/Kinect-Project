@@ -1,0 +1,91 @@
+\documentclass{report}
+
+\usepackage{fullpage}
+\usepackage[pdftex]{graphicx}
+\usepackage{appendix}
+\usepackage{pdfpages}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+
+%make title page
+\input{./titlepage.tex}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+The system described in this document is designed to help individuals with motor
+difficulty improve their motor skills. Although it can be of use with patients
+with various forms of motor difficulty, it is targeted particlularly towards
+patients suffering from \textit{DCD}, or Dissociative Coordination Disorder. 
+
+\section{Purpose of Guide} 
+This document is not primarily intended as a guide for End Users. Instead, it is primarily intended for the following audiences:
+
+\begin{itemize}
+	\item Whoever continues the project: Any student who decides to extend my research on the use of the Microsoft Kinect and the Unity3d game engine
+
+	\item Myself: This guide will also be useful to me, the author of the project, as a reference of what I have accomplished
+
+	\item Research Supervisors: This will be helpful to my research supervisors or any other audience who wishes an in-depth understanding of my project
+\end{itemize}
+
+This document is not a general overview. For an overview, please refer to the DANA Project Report in the Appendix.
+
+Instead, it is intended for the following uses
+\begin{itemize}
+	\item GUI Guide: A simple overview of the GUI controls used in my project, and their purpose.
+
+	\item Usage Guide: Information on how to use the software created as part of my project
+
+	\item Code Map: An overview of how I structured the code of my project
+
+\end{itemize}
+
+\section{Usage Guide}
+My project is comprised of 2 projects in Unity3d --- a \textbf{Therapist's Interface} and a \textbf{Game Demo}. This section details how to use each of these applications.
+
+\subsection{Therapist's Interface}
+This interface is intended for use by the therapist. It allows him or her to record an exercise and define it as a series of poses. Each pose is marked by a key point. Once the poses are marked, the Therapist can either save the file in a format that is editable, or export it to the patient. Both kinds of file can be sent to the patient, although the exported file will be much smaller in size.
+
+In order to use the therapist's interface to record an exercise, the following steps should be taken:
+
+\begin{enumerate}
+	\item Check if Kinect works: The therapist should step in front of the kinect sensor, and test if the system works. If the system is working, the avatar should move to match the therapist's pose, and the depth image in the lower right corner should show a live view of the sensor's input.
+
+	\item Record Exercise: After clicking the `Record' button, the therapist should step in front of the kinect and do the exercise in full. For ease of editability, the exercise should be done slowly. Once the therapist finishes doing the exercise, he or she must click the 'Stop Recording' button.
+
+	\item Set Start/End of exercise: The therapist must now trim off the beginning and end of the exercise. The system will not be able to read the period of time where the therapist is moving towards the kinect (before the exercise begins) or the period where the therapist moves away from the kinect (after the exercise ends.
+
+		These parts of the exercise recording should therefore be removed. To create a new start, the therapist should move the slider to the point at which the exercise begins and press the `New Start' button. To create a new end the therapist should move the slider to the point at which the exercise ends and press the 'New end' button.
+
+	\item Mark Key Points: Now that the exercise has been recorded and trimmed, the therapist must divide it up into a series of poses. To mark a pose, he or she should first use the slider to move the avatar until it displays the appropriate part of the exercise, and then click the 'Add key point' button. To confirm that a new key point has been added, the new key point will appear on the 'Key points list' on the upper right. 
+	
+	\item Save/Export: Once all the key points are marked, the therapist can either save or export the file. Saving the file retains it in an editable format, but results in a file that can be too large to transmit to a patient through e-mail. Exporting it will result in a file that cannot be edited easily (key points can be removed but not added) but which is small enough to easily be transmitted through e-mail.
+\end{enumerate}
+
+\subsection{Game Demo}
+This simple game demo is an implementation of the Children's game ``Simon Says''. The indicator avatar on the right will go through a series of poses as defined by the exercise which is loaded, and the player avatar must match these poses before the allotted time runs out.
+
+The following steps must be followed to use the Demo:
+
+\begin{enumerate}
+	\item Load an exercise: This button displays a load panel, which allows the user to select an exercise.
+
+	\item Demo the exercise: Once the exercise is loaded, pressing this button will make the indicator avatar move through the series of poses in the exercise.
+
+	\item Play the game: This initiates the game.
+\end{enumerate}
+
+\subsection{Room Dimensions and Lighting}
+The effectiveness of this system is highly dependent on the dimensions and lighting of the room it is used in. First
+
+\appendixpage
+\label{Report}\includepdf[pages=-]{Report}
+
+\end{document}
+
+
