@@ -12,7 +12,27 @@ using System.Collections;
 /// </summary>
 public class SoundScript : MonoBehaviour
 {
-
+    /*
+     * List of sounds we want
+     * ----------------------
+     * Ambient sounds
+     * * Background noise
+     * * Music
+     * 
+     * Voices and Sound
+     * ----------------
+     * Exercise Success
+     * Exercise Fail
+     * 
+     * Voices and Sound
+     * ----------------
+     * Gesture Success
+     * Gesture Fail
+     * 
+     * Start Game
+     * End Game 
+     * 
+     */
     #region Sound Clips
 
     /// <summary>
@@ -20,16 +40,18 @@ public class SoundScript : MonoBehaviour
     /// is completed
     /// </summary>
     [System.Serializable]
-    public class ExerciseSuccessFail
+    public class GestureSuccessFail
     {
         public AudioClip success;
         public AudioClip fail;
     }
 
+    
+
     /// <summary>
     /// Instance of class ExerciseSuccessFail
     /// </summary>
-    public ExerciseSuccessFail exerciseSuccessFail;
+    public GestureSuccessFail gestureSuccessFail;
 
     #endregion
 
@@ -51,7 +73,7 @@ public class SoundScript : MonoBehaviour
     public void PlayGestureSuccessSound()
     {
         //set the clip
-        mainAudioSource.clip = exerciseSuccessFail.success;
+        mainAudioSource.clip = gestureSuccessFail.success;
 
         //play the clip
         mainAudioSource.Play();
@@ -64,7 +86,7 @@ public class SoundScript : MonoBehaviour
     public void PlayGestureFailSound()
     {
         //set the clip
-        mainAudioSource.clip = exerciseSuccessFail.fail;
+        mainAudioSource.clip = gestureSuccessFail.fail;
 
         //play the clip
         mainAudioSource.Play();
