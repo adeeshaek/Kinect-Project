@@ -7,8 +7,19 @@ using System.Collections;
 /// a method is defined in this class, and
 /// called from the translationLayer. 
 /// 
-/// The audio clips and audiosources are defined 
-/// in this class
+/// The audio clips and methods to call each
+/// sound event are called from this class.
+/// 
+/// There are 3 gameobjects with audiosource
+/// components attached. They are:
+/// * AmbientSound
+/// * Effects
+/// * Music
+/// * Voice
+/// 
+/// This script uses the above gameObjects to 
+/// play the relevant clips 
+/// 
 /// </summary>
 public class SoundScript : MonoBehaviour
 {
@@ -18,16 +29,43 @@ public class SoundScript : MonoBehaviour
      * Ambient sounds
      * * Background noise
      * * Music
-     * * 
+     * * Game Background noise
+     * * Game Music
+     * 
      * Voices and Sound
      * ----------------
      * Gesture Success
      * Gesture Fail
      * 
      * Start Game
-     * End Game 
      * 
      */
+    #region Global Variables
+
+    #region Gameobjects
+
+    /*
+     * The gameobjects for AmbientSounds, Effects and Music
+     * are each assigned a name, and the names are recorded 
+     * here
+     */
+
+    /// <summary>
+    /// name of gameObject which plays ambient sounds
+    /// </summary>
+    public static string AmbientSoundGameObjectName = "AmbientSound";
+
+    /// <summary>
+    /// name of gameobject which plays effects
+    /// </summary>
+    public static string EffectsGameObjectName = "Effects";
+
+    /// <summary>
+    /// name of gameobject which plays music
+    /// </summary>
+    public static string MusicGameObjectName = "Music";
+
+    #endregion
     #region Sound Clips
 
     /// <summary>
@@ -43,7 +81,18 @@ public class SoundScript : MonoBehaviour
 
     /// <summary>
     /// Encapsulates audio clips for background music and background
-    /// noise
+    /// noise. These sounds only play once a "Game" has started.
+    /// </summary>
+    [System.Serializable]
+    public class GameAmbientSounds
+    {
+        public AudioClip backgroundNoise;
+        public AudioClip music;
+    }
+    
+    /// <summary>
+    /// Encapsulates audio clips for background music and background
+    /// noise. These are ambient sounds which play before a game starts
     /// </summary>
     [System.Serializable]
     public class AmbientSounds
@@ -63,7 +112,10 @@ public class SoundScript : MonoBehaviour
         public AudioClip endGame;
     }
     
-
+    /*
+     * Each of the above classes where sound clips are attached
+     * are instantiated here. This is to make the unity menu neat
+     */
     /// <summary>
     /// Instance of class ExerciseSuccessFail
     /// </summary>
@@ -75,18 +127,34 @@ public class SoundScript : MonoBehaviour
     public AmbientSounds ambientSounds;
 
     /// <summary>
+    /// Instance of GameAmbientSounds
+    /// </summary>
+    public GameAmbientSounds gameAmbientSounds;
+
+    /// <summary>
     /// Instance of StartEndGame
     /// </summary>
     public StartEndGame startEndGame;
 
     #endregion
+    #endregion
 
     #region Audio Sources
 
     /// <summary>
-    /// The default Audiosource to use
+    /// Source for playing ambient sounds
     /// </summary>
-    AudioSource mainAudioSource;
+    AudioSource ambientSoundSource;
+
+    /// <summary>
+    /// Source for playing effects
+    /// </summary>
+    AudioSource effectsSource;
+
+    /// <summary>
+    /// Source for playing music
+    /// </summary>
+    AudioSource musicSource;
 
     #endregion
 
@@ -99,10 +167,10 @@ public class SoundScript : MonoBehaviour
     public void PlayGestureSuccessSound()
     {
         //set the clip
-        mainAudioSource.clip = gestureSuccessFail.success;
+        effectsSource.clip = gestureSuccessFail.success;
 
         //play the clip
-        mainAudioSource.Play();
+        effectsSource.Play();
     }
 
     /// <summary>
@@ -112,10 +180,10 @@ public class SoundScript : MonoBehaviour
     public void PlayGestureFailSound()
     {
         //set the clip
-        mainAudioSource.clip = gestureSuccessFail.fail;
+        effectsSource.clip = gestureSuccessFail.fail;
 
         //play the clip
-        mainAudioSource.Play();
+        effectsSource.Play();
 
     }
 
@@ -126,10 +194,10 @@ public class SoundScript : MonoBehaviour
     public void PlayGameStartSound()
     {
         //set the clip
-        mainAudioSource.clip = startEndGame.startGame;
+        effectsSource.clip = startEndGame.startGame;
 
         //play clip
-        mainAudioSource.Play();
+        effectsSource.Play();
     }
 
     /// <summary>
@@ -139,44 +207,89 @@ public class SoundScript : MonoBehaviour
     public void PlayGameEndSound()
     {
         //set the clip
-        mainAudioSource.clip = startEndGame.endGame;
+        effectsSource.clip = startEndGame.endGame;
 
         //play clip
-        mainAudioSource.Play();
+        effectsSource.Play();
+    }
+
+     /// <summary>
+    /// plays the In-game background music
+    /// called by translation layer
+    /// </summary>
+    public void PlayGameBackgroundNoise()
+    {
+        //set the clip
+        ambientSoundSource.clip = gameAmbientSounds.backgroundNoise;
+
+        //play clip
+        ambientSoundSource.Play();
     }
 
     /// <summary>
-    /// plays the background music
+    /// plays the in-game music
+    /// called by translation layer
+    /// </summary>
+    public void PlayGameMusic()
+    {
+        //set the clip
+        musicSource.clip = gameAmbientSounds.music;
+
+        //play clip
+        musicSource.Play();
+    }
+
+    /// <summary>
+    /// Stops playing all ambient music
+    /// called by translation layer
+    /// </summary>
+    public void StopAmbientMusic()
+    {
+        musicSource.Stop();
+        ambientSoundSource.Stop();
+    }
+    
+    /// <summary>
+    /// plays the ambient background music
     /// called by translation layer
     /// </summary>
     public void PlayBackgroundNoise()
     {
         //set the clip
-        mainAudioSource.clip = ambientSounds.backgroundNoise;
+        ambientSoundSource.clip = ambientSounds.backgroundNoise;
 
         //play clip
-        mainAudioSource.Play();
+        ambientSoundSource.Play();
     }
 
     /// <summary>
-    /// plays the music
+    /// plays the ambient music
     /// called by translation layer
     /// </summary>
     public void PlayMusic()
     {
         //set the clip
-        mainAudioSource.clip = ambientSounds.music;
+        musicSource.clip = ambientSounds.music;
 
         //play clip
-        mainAudioSource.Play();
+        musicSource.Play();
     }
     #endregion
 
     // Use this for initialization
 	void Start () {
-        mainAudioSource = gameObject.GetComponent<AudioSource>(); //reference to the Audiosource attached to the GameObject
+        /*
+         * Initializing audio Sources
+         * --------------------------
+         */
+        ambientSoundSource = GameObject.Find(AmbientSoundGameObjectName)
+            .GetComponent<AudioSource>();
+        effectsSource = GameObject.Find(EffectsGameObjectName)
+            .GetComponent<AudioSource>();
+        musicSource = GameObject.Find(MusicGameObjectName)
+            .GetComponent<AudioSource>();
 
-        //make backgroundnoise and music play
+        //make backgroundnoise and music play from the start of the game
         PlayBackgroundNoise();
         PlayMusic();
 	}

@@ -35,7 +35,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Name of the gameobject which handles all system sounds
     /// </summary>
-    public static string soundGameObjectName = "Sounds";
+    public static string soundGameObjectName = "SoundScript";
 
     /// <summary>
     /// Declares the sound gameObject, since there is only one for the whole script
@@ -544,6 +544,11 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void StartListeningForWholeBodyGesture()
     {
+        //Play sounds!
+        systemSounds.PlayGameStartSound();
+        systemSounds.PlayGameBackgroundNoise();
+        systemSounds.PlayGameMusic();
+
         //set current keyPoint to 0
         currentKeyPoint = 0;
 
@@ -743,6 +748,14 @@ public class TranslationLayer : MonoBehaviour {
         listeningForWholeBodyGesture = false; //stop listening
         isCheckingForExercise = false;
         feedbackText1.text = "Exercise Complete:  " + exerciseScore + " / " + keypointsList.Count;
+    
+        //stop playing some sounds
+        systemSounds.StopAmbientMusic();
+
+        //play sound
+        systemSounds.PlayGameEndSound();
+        systemSounds.PlayMusic();
+        systemSounds.PlayBackgroundNoise();
     }
 
     /// <summary>
