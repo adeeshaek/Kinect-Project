@@ -78,6 +78,11 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public int currentKeyPoint = 0;
 
+    /// <summary>
+    /// flags true if seated mode is on
+    /// </summary>
+    public bool seatedModeOn = false;
+
 #endregion
 
     #region gesture tracking sensitivity variables
@@ -846,6 +851,15 @@ public class TranslationLayer : MonoBehaviour {
 
         if (isAnimatingIndicatorModel)
             AnimateIndicatorModel();
+
+        //seated mode
+        if (seatedModeOn)
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .SeatedMode();
+
+        else
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .DisableSeatedMode();
 
         //UpdateGuiText();
     }

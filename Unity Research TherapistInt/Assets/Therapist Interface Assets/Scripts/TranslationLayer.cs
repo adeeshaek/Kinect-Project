@@ -43,48 +43,56 @@ public class TranslationLayer : MonoBehaviour {
     public static string GUIGameObjectName = "GUI";
 
 
-#region Lists and playback related variables
+    #region Lists and playback related variables
 
-    /// <summary>
-    /// List containing recording of avatar's movements to be played back
-    /// </summary>
-    public List<SerializeScript.SnapshotClass> playbackList;
+        /// <summary>
+        /// List containing recording of avatar's movements to be played back
+        /// </summary>
+        public List<SerializeScript.SnapshotClass> playbackList;
 
-    /// <summary>
-    /// List containing a copy of the playbackList just before the most recent change
-    /// </summary>
-    public List<SerializeScript.SnapshotClass> backupList;
+        /// <summary>
+        /// List containing a copy of the playbackList just before the most recent change
+        /// </summary>
+        public List<SerializeScript.SnapshotClass> backupList;
 
-    /// <summary>
-    /// List containing index of keypoints
-    /// </summary>
-    public List<SerializeScript.KeyPoint> keypointsList;
+        /// <summary>
+        /// List containing index of keypoints
+        /// </summary>
+        public List<SerializeScript.KeyPoint> keypointsList;
 
-    /// <summary>
-    /// Flags if the recording in memory is being played
-    /// </summary>
-    public bool isPlaying = false;
+        /// <summary>
+        /// Flags if the recording in memory is being played
+        /// </summary>
+        public bool isPlaying = false;
 
-    /// <summary>
-    /// Flags if the player's movements are being recorded
-    /// </summary>
-    public bool isRecording = false;
+        /// <summary>
+        /// Flags if the player's movements are being recorded
+        /// </summary>
+        public bool isRecording = false;
 
-    /// <summary>
-    /// Tracks the current frame of the recording
-    /// </summary>
-    public int currentFrame = 0;
+        /// <summary>
+        /// Tracks the current frame of the recording
+        /// </summary>
+        public int currentFrame = 0;
 
-    /// <summary>
-    /// Flags true if listening for a pose
-    /// </summary>
-    public bool listeningForGesture = false;
+        /// <summary>
+        /// Flags true if listening for a pose
+        /// </summary>
+        public bool listeningForGesture = false;
 
-#endregion
+        #region seated mode
 
-    #region GUI Controls
+        /// <summary>
+        /// Flags true if seated mode is on
+        /// </summary>
+        public bool seatedModeOn = false;
+        #endregion
 
-    /// <summary>
+    #endregion
+
+        #region GUI Controls
+
+        /// <summary>
     /// Text used for GUI feedback
     /// </summary>
     public GUIText feedbackText1;
@@ -629,6 +637,14 @@ public class TranslationLayer : MonoBehaviour {
         if (isRecording)
             RecordFrame();
 
+        //for seated mode
+        if (seatedModeOn)
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .SeatedMode();
+        else
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .DisableSeatedMode();
+
         UpdateGuiText();
     }
 
@@ -637,12 +653,15 @@ public class TranslationLayer : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-	
+	    
+        //enable seated mode
+        //REMOVE SOON?
+       // GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().SeatedMode();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    
 	}
 
     /// <summary>
