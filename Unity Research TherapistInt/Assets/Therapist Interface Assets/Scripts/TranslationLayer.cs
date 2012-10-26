@@ -638,13 +638,14 @@ public class TranslationLayer : MonoBehaviour {
             RecordFrame();
 
         //for seated mode
+        /*
         if (seatedModeOn)
             GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
                 .SeatedMode();
         else
             GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
                 .DisableSeatedMode();
-
+        */
         UpdateGuiText();
     }
 

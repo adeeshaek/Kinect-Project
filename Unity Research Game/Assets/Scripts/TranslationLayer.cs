@@ -854,13 +854,20 @@ public class TranslationLayer : MonoBehaviour {
 
         //seated mode
         if (seatedModeOn)
+        {
             GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
                 .SeatedMode();
+            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+    .SeatedMode();
+        }
 
         else
+        {
             GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
                 .DisableSeatedMode();
-
+            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                .DisableSeatedMode();
+        }
         //UpdateGuiText();
     }
 

@@ -111,6 +111,9 @@ public class ZigSkeleton : MonoBehaviour
 		transforms = new Transform[jointCount];
 		initialRotations = new Quaternion[jointCount];
 
+        if (seatedModeOn)
+            SeatedMode();
+
         transforms[(int)ZigJointId.Head] = Head;
         transforms[(int)ZigJointId.Neck] = Neck;
         transforms[(int)ZigJointId.Torso] = Torso;
@@ -158,6 +161,11 @@ public class ZigSkeleton : MonoBehaviour
     bool isReturningFrame = false;
 
     /// <summary>
+    /// flags true if seated mode is on
+    /// </summary>
+    public bool seatedModeOn = false;
+
+    /// <summary>
     /// List used to record user movement
     /// </summary>
     List<SerializeScript.SnapshotClass> recordList;
@@ -184,7 +192,7 @@ public class ZigSkeleton : MonoBehaviour
     {
 
         //now set all of the lowerbody points to null
-
+        /*
         transforms[(int)ZigJointId.Waist] = null;
         transforms[(int)ZigJointId.LeftHip] = null;
         transforms[(int)ZigJointId.LeftKnee] = null;
@@ -194,10 +202,19 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightKnee] = null;
         transforms[(int)ZigJointId.RightAnkle] = null;
         transforms[(int)ZigJointId.RightFoot] = null;
+        */
+        Waist = null;
 
+        LeftHip = null;
+        LeftKnee = null;
+        LeftAnkle = null;
+        LeftFoot = null;
 
-        //make a log post
-        Debug.LogWarning("Seated Mode!");
+        RightHip = null;
+        RightKnee = null;
+        RightAnkle = null;
+        RightFoot = null;
+
     }
 
     /// <summary>
@@ -210,6 +227,7 @@ public class ZigSkeleton : MonoBehaviour
     {
 
         //restore the backupTransformList
+        /*
         transforms[(int)ZigJointId.Waist] = Waist;
         transforms[(int)ZigJointId.LeftHip] = LeftHip;
         transforms[(int)ZigJointId.LeftKnee] = LeftKnee;
@@ -219,6 +237,8 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightKnee] = RightKnee;
         transforms[(int)ZigJointId.RightAnkle] = RightAnkle;
         transforms[(int)ZigJointId.RightFoot] = RightFoot;
+         */
+
     }
 
 
