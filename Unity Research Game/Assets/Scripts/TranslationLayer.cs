@@ -94,6 +94,11 @@ public class TranslationLayer : MonoBehaviour {
     public float gestureRecognitionThreshold = 1.2f;
 
     /// <summary>
+    /// Measures sensitivity of gesture recognition, in seated mode
+    /// </summary>
+    public float seatedGestureRecognitionThreshold = 0.8f;
+
+    /// <summary>
     /// Duration for which the user has to hold a gesture in order for it to register
     ///     as being succesfully held
     /// </summary>
@@ -524,7 +529,14 @@ public class TranslationLayer : MonoBehaviour {
                 List<Transform> templatePose =
                     gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
 
-                isHoldingPose = CheckForPose(avatarPose, templatePose);
+                if (!seatedModeOn)
+                    isHoldingPose = CheckForPose(avatarPose, templatePose);
+                else
+                {
+                    isHoldingPose = CheckForSeatedPose(avatarPose, templatePose);
+                    //make gesture recognition clone assume seated mode
+                    gestureRecognitionClone.GetComponent<ZigSkeleton>().SeatedMode();
+                }
 
                 if (isHoldingPose)
                 {
@@ -574,6 +586,43 @@ public class TranslationLayer : MonoBehaviour {
     }
 
     /// <summary>
+    /// Checks if avatar and template are holding the same pose, In seated mode
+    /// </summary>
+    /// <param name="avatarPose">pose of player avatar</param>
+    /// <param name="templatePose">pose of template avatar to check against</param>
+    /// <returns>Boolean, true if user is holding gesture and false if not</returns>
+    public bool CheckForSeatedPose(List<Transform> avatarPose, List<Transform> templatePose)
+    {
+
+        float sum = 0; //sum of the distance between poses
+
+
+        for (int i = 0; i < avatarPose.Count; i++)
+        {
+
+            if (i < templatePose.Count)
+            {
+                sum += Vector3.Distance(avatarPose[i].position, templatePose[i].position);
+            }
+        }
+
+        //GUI text it!
+        //feedbackText1.text = sum.ToString();
+
+        //check if it is below threshold
+        if (sum < gestureRecognitionThreshold)
+        {
+            //This means user is holding gesture
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+    
+    /// <summary>
     /// Checks if avatar and template are holding the same pose
     /// </summary>
     /// <param name="avatarPose">pose of player avatar</param>
@@ -622,11 +671,25 @@ public class TranslationLayer : MonoBehaviour {
             List<Transform> templatePose =
                 gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
 
-            //if holding gesture add to the score
-            if (CheckForPose(avatarPose, templatePose))
+            //check if seated mode
+            if (!seatedModeOn)
             {
-                gestureScore++;
+                //if holding gesture add to the score
+                if (CheckForPose(avatarPose, templatePose))
+                {
+                    gestureScore++;
+                }
             }
+
+            else
+            {
+                //if holding gesture add to the score
+                if (CheckForSeatedPose(avatarPose, templatePose))
+                {
+                    gestureScore++;
+                }
+            }
+
             //increment count
             gestureCount++;
 
