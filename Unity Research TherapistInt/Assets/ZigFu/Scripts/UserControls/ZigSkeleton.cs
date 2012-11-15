@@ -99,14 +99,21 @@ public class ZigSkeleton : MonoBehaviour
 		}
 	}
 		
-		
+	/// <summary>
+	/// Initializes Skeleton Tracking.
+    /// The SEATED MODE SWITCH is here.
+	/// </summary>
+	
 	public void Awake()
 	{
 		int jointCount = Enum.GetNames(typeof(ZigJointId)).Length;
 		
 		transforms = new Transform[jointCount];
 		initialRotations = new Quaternion[jointCount];
-		
+
+        if (seatedModeOn)
+            SeatedMode();
+
         transforms[(int)ZigJointId.Head] = Head;
         transforms[(int)ZigJointId.Neck] = Neck;
         transforms[(int)ZigJointId.Torso] = Torso;
@@ -154,13 +161,87 @@ public class ZigSkeleton : MonoBehaviour
     bool isReturningFrame = false;
 
     /// <summary>
+    /// flags true if seated mode is on
+    /// </summary>
+    public bool seatedModeOn = false;
+
+    /// <summary>
     /// List used to record user movement
     /// </summary>
     List<SerializeScript.SnapshotClass> recordList;
 
+    /// <summary>
+    /// A dict with backups of all the transfoms which 
+    /// can be used to disable seated mode
+    /// This has TransformName mapped to GameTransform
+    /// e.g: LeftHip, Dana's LeftHip
+    /// </summary>
+    Dictionary<String, Transform> backupTransformList;
+
     #endregion
 
     #region customMethods
+
+    /// <summary>
+    /// Enables seated mode by setting the gameobjects for all the lower body
+    /// poses to null. 
+    /// Creates a backuplist of all joints which can be used to disable seated 
+    /// mode
+    /// </summary>
+    public void SeatedMode()
+    {
+
+        //now set all of the lowerbody points to null
+        /*
+        transforms[(int)ZigJointId.Waist] = null;
+        transforms[(int)ZigJointId.LeftHip] = null;
+        transforms[(int)ZigJointId.LeftKnee] = null;
+        transforms[(int)ZigJointId.LeftAnkle] = null;
+        transforms[(int)ZigJointId.LeftFoot] = null;
+        transforms[(int)ZigJointId.RightHip] = null;
+        transforms[(int)ZigJointId.RightKnee] = null;
+        transforms[(int)ZigJointId.RightAnkle] = null;
+        transforms[(int)ZigJointId.RightFoot] = null;
+        */
+        Waist = null;
+
+        LeftHip = null;
+        LeftKnee = null;
+        LeftAnkle = null;
+        LeftFoot = null;
+
+        RightHip = null;
+        RightKnee = null;
+        RightAnkle = null;
+        RightFoot = null;
+
+    }
+
+    /// <summary>
+    /// Disables seated mode by reading the backupTransformList and restoring
+    /// all of the transforms to the correct gameObjects
+    /// 
+    /// This also disables the bool
+    /// </summary>
+    public void DisableSeatedMode()
+    {
+
+        //restore the backupTransformList
+        /*
+        transforms[(int)ZigJointId.Waist] = Waist;
+        transforms[(int)ZigJointId.LeftHip] = LeftHip;
+        transforms[(int)ZigJointId.LeftKnee] = LeftKnee;
+        transforms[(int)ZigJointId.LeftAnkle] = LeftAnkle;
+        transforms[(int)ZigJointId.LeftFoot] = LeftFoot;
+        transforms[(int)ZigJointId.RightHip] = RightHip;
+        transforms[(int)ZigJointId.RightKnee] = RightKnee;
+        transforms[(int)ZigJointId.RightAnkle] = RightAnkle;
+        transforms[(int)ZigJointId.RightFoot] = RightFoot;
+         */
+
+    }
+
+
     /// <summary>
     /// Makes the avatar assume the pose recorded in the frame passed in
     /// </summary>
@@ -350,6 +431,7 @@ public class ZigSkeleton : MonoBehaviour
 			transforms[(int)joint].rotation = Quaternion.Slerp(transforms[(int)joint].rotation, newRotation, Time.deltaTime * RotationDamping);
         }
 	}
+
 	Vector3 doMirror(Vector3 vec)   
     {
         return new Vector3(mirror ? -vec.x : vec.x, vec.y, vec.z);
