@@ -101,8 +101,12 @@ public class ButtonScript : MonoBehaviour
             case 5:
                 ExportButtonClicked();
                 break;
+
+
         }
     }
+
+
 
     /// <summary>
     /// Handles event raised when a button on the bottom panel is clicked
@@ -132,6 +136,10 @@ public class ButtonScript : MonoBehaviour
 
             case 4:
                 UndoButtonClicked();
+                break;
+
+            case 5:
+                SeatedModeButtonClicked();
                 break;
         }
     }
@@ -345,7 +353,29 @@ public class ButtonScript : MonoBehaviour
             .UndoChange();
     }
 
+    /// <summary>
+    /// Event handler for seated mode button
+    /// </summary>
+    public void SeatedModeButtonClicked()
+    {
+        bool seatedmodebool = GameObject.Find(translationLayerObjectName).GetComponent<TranslationLayer>()
+            .seatedModeOn;
 
+        //seated mode is on
+        if (seatedmodebool)
+        {
+            bottomPanel.buttonArray[5].text = "Seated Mode Off";
+            GameObject.Find(translationLayerObjectName).GetComponent<TranslationLayer>()
+            .DisableSeatedMode();
+        }
+
+        else
+        {
+            bottomPanel.buttonArray[5].text = "Seated Mode On";
+            GameObject.Find(translationLayerObjectName).GetComponent<TranslationLayer>()
+            .EnableSeatedMode();
+        }
+    }
     #endregion
 
     #region slider methods

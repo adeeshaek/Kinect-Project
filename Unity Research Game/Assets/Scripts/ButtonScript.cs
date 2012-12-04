@@ -64,9 +64,42 @@ public class ButtonScript : MonoBehaviour {
                 break;
 
             case 3:
-                WholeBodyListenButtonPressed();
+                SeatedModeButtonPressed();
                 break;
         }
+    }
+
+    /// <summary>
+    /// Handles the event raised when the seated mode button is pressed
+    /// Also manages the states of the seated mode button
+    /// </summary>
+    void SeatedModeButtonPressed()
+    {
+        //check if the intermediate object has seated mode on
+        bool seatedModeState = GameObject.Find(intermediateObjectName).GetComponent<TranslationLayer>()
+            .seatedModeOn;
+
+        //if so, set seated mode to off 
+        if (seatedModeState)
+        {
+            GameObject.Find(intermediateObjectName).GetComponent<TranslationLayer>()
+                .seatedModeOn = false;
+
+            //set button to read seated mode off
+            myPanel.buttonArray[3].text = "Seated Mode Off";
+        }
+
+        else
+        {
+            //else set seated mode to on
+            GameObject.Find(intermediateObjectName).GetComponent<TranslationLayer>()
+                .seatedModeOn = true;
+
+            //set button to read Seated Mode on
+            myPanel.buttonArray[3].text = "Seated Mode On";
+        }
+
+
     }
 
     /// <summary>

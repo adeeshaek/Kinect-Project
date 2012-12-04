@@ -119,6 +119,54 @@ public class ZigSkeleton : MonoBehaviour
     #endregion
 
     #region customMethods
+
+    /// <summary>
+    /// Enables seated mode by setting the gameobjects for all the lower body
+    /// poses to null. 
+    /// Creates a backuplist of all joints which can be used to disable seated 
+    /// mode
+    /// </summary>
+    public void SeatedMode()
+    {
+
+        //now set all of the lowerbody points to null
+
+        transforms[(int)ZigJointId.Waist] = null;
+        transforms[(int)ZigJointId.LeftHip] = null;
+        transforms[(int)ZigJointId.LeftKnee] = null;
+        transforms[(int)ZigJointId.LeftAnkle] = null;
+        transforms[(int)ZigJointId.LeftFoot] = null;
+        transforms[(int)ZigJointId.RightHip] = null;
+        transforms[(int)ZigJointId.RightKnee] = null;
+        transforms[(int)ZigJointId.RightAnkle] = null;
+        transforms[(int)ZigJointId.RightFoot] = null;
+
+
+    }
+
+    /// <summary>
+    /// Disables seated mode by reading the backupTransformList and restoring
+    /// all of the transforms to the correct gameObjects
+    /// 
+    /// This also disables the bool
+    /// </summary>
+    public void DisableSeatedMode()
+    {
+
+        //restore the backupTransformList
+        transforms[(int)ZigJointId.Waist] = Waist;
+        transforms[(int)ZigJointId.LeftHip] = LeftHip;
+        transforms[(int)ZigJointId.LeftKnee] = LeftKnee;
+        transforms[(int)ZigJointId.LeftAnkle] = LeftAnkle;
+        transforms[(int)ZigJointId.LeftFoot] = LeftFoot;
+        transforms[(int)ZigJointId.RightHip] = RightHip;
+        transforms[(int)ZigJointId.RightKnee] = RightKnee;
+        transforms[(int)ZigJointId.RightAnkle] = RightAnkle;
+        transforms[(int)ZigJointId.RightFoot] = RightFoot;
+
+
+    }
+
     /// <summary>
     /// Makes the avatar assume the pose recorded in the frame passed in
     /// </summary>
