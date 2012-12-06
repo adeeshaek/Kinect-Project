@@ -538,6 +538,32 @@ public class TranslationLayer : MonoBehaviour {
 
 #endregion
 
+    #region Seated mode related methods
+
+    /// <summary>
+    /// Enables seated mode by calling the enable seated mode method
+    /// for the Zigskeleton script attached to the avatar gameobject
+    /// </summary>
+    public void EnableSeatedMode()
+    {
+        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+            .SeatedMode();
+        seatedModeOn = true;
+    }
+
+    /// <summary>
+    /// Disables seated mode by calling the disable seated mode method
+    /// for the Zigskeleton script attached to the avatar gameobject
+    /// </summary>
+    public void DisableSeatedMode()
+    {
+        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+            .DisableSeatedMode();
+        seatedModeOn = false;
+    }
+
+    #endregion
+
     #region Gesture tracking methods
 
     /// <summary>
@@ -655,9 +681,13 @@ public class TranslationLayer : MonoBehaviour {
     // Use this for initialization
 	void Start () {
 	    
+<<<<<<< HEAD
         //enable seated mode
         //REMOVE SOON?
        // GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().SeatedMode();
+=======
+
+>>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
 	}
 	
 	// Update is called once per frame
