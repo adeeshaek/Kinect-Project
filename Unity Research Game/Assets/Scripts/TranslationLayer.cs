@@ -113,6 +113,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if a gesture has been initiated
     /// </summary>
+    [HideInInspector]
     public bool isHoldingGesture = false;
 
     /// <summary>
@@ -123,6 +124,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if indicator is animating
     /// </summary>
+    [HideInInspector]
     public bool isAnimatingIndicatorModel = false;
 
     /// <summary>
@@ -139,11 +141,12 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// flags true if checking for an exercise. Used to make the countdown timer work
     /// </summary>
+    [HideInInspector]
     public bool isCheckingForExercise = false;
 
 
 #endregion
-
+    
     #region Exercise tracking related variables
 
     /// <summary>
@@ -188,11 +191,13 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if listening for a pose
     /// </summary>
+    [HideInInspector]
     public bool listeningForGesture = false;
 
     /// <summary>
     /// Flags true if listening for a whole body pose
     /// </summary>
+    [HideInInspector]
     public bool listeningForWholeBodyGesture = false;
 
 #endregion
@@ -216,17 +221,13 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Countdown timer used for gesture tracking
     /// </summary>
+    [HideInInspector]
     public mySimpleTimer.SimpleCountdownTimer countdownTimer;
-   
     /// <summary>
     /// Countdown timer used for demonstrating exercises
     /// </summary>
+    [HideInInspector]
     public mySimpleTimer.SimpleCountdownTimer demoCountdownTimer;
-   
-    /// <summary>
-    /// Time allowed for each exercise
-    /// </summary>
-    public double gestureTime = 10;
 
     #endregion
 
@@ -610,7 +611,7 @@ public class TranslationLayer : MonoBehaviour {
         //feedbackText1.text = sum.ToString();
 
         //check if it is below threshold
-        if (sum < gestureRecognitionThreshold)
+        if (sum < seatedGestureRecognitionThreshold)
         {
             //This means user is holding gesture
             return true;
@@ -794,7 +795,7 @@ public class TranslationLayer : MonoBehaviour {
 
             StartAnimatingIndicatorModel();
 
-            countdownTimer.SetStartTime(gestureTime);
+            countdownTimer.SetStartTime(gestureHoldLength);
 
             countdownTimer.StartCountdown();
         }
@@ -947,7 +948,7 @@ void Start () {
 
         //init the countdown timers
         countdownTimer = new mySimpleTimer.SimpleCountdownTimer();
-        countdownTimer.StartMethod(gestureTime, 
+        countdownTimer.StartMethod(gestureHoldLength, 
             new mySimpleTimer.SimpleCountdownTimer.TimerEventHandler(TimerZeroEvent));
 
         demoCountdownTimer = new mySimpleTimer.SimpleCountdownTimer();
