@@ -663,6 +663,15 @@ public class TranslationLayer : MonoBehaviour {
         if (isRecording)
             RecordFrame();
 
+        //for seated mode
+        /*
+        if (seatedModeOn)
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .SeatedMode();
+        else
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .DisableSeatedMode();
+        */
         UpdateGuiText();
     }
 
@@ -672,7 +681,13 @@ public class TranslationLayer : MonoBehaviour {
     // Use this for initialization
 	void Start () {
 	    
+<<<<<<< HEAD
+        //enable seated mode
+        //REMOVE SOON?
+       // GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().SeatedMode();
+=======
 
+>>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
 	}
 	
 	// Update is called once per frame
