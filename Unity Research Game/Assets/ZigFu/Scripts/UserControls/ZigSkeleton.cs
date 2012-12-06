@@ -141,10 +141,7 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightAnkle] = null;
         transforms[(int)ZigJointId.RightFoot] = null;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
     }
 
     /// <summary>
@@ -167,10 +164,7 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightAnkle] = RightAnkle;
         transforms[(int)ZigJointId.RightFoot] = RightFoot;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
     }
 
     /// <summary>
