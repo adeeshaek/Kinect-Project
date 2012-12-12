@@ -113,6 +113,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if a gesture has been initiated
     /// </summary>
+    [HideInInspector]
     public bool isHoldingGesture = false;
 
     /// <summary>
@@ -123,6 +124,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if indicator is animating
     /// </summary>
+    [HideInInspector]
     public bool isAnimatingIndicatorModel = false;
 
     /// <summary>
@@ -139,11 +141,12 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// flags true if checking for an exercise. Used to make the countdown timer work
     /// </summary>
+    [HideInInspector]
     public bool isCheckingForExercise = false;
 
 
 #endregion
-
+    
     #region Exercise tracking related variables
 
     /// <summary>
@@ -188,11 +191,13 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Flags true if listening for a pose
     /// </summary>
+    [HideInInspector]
     public bool listeningForGesture = false;
 
     /// <summary>
     /// Flags true if listening for a whole body pose
     /// </summary>
+    [HideInInspector]
     public bool listeningForWholeBodyGesture = false;
 
 #endregion
@@ -216,17 +221,13 @@ public class TranslationLayer : MonoBehaviour {
     /// <summary>
     /// Countdown timer used for gesture tracking
     /// </summary>
+    [HideInInspector]
     public mySimpleTimer.SimpleCountdownTimer countdownTimer;
-   
     /// <summary>
     /// Countdown timer used for demonstrating exercises
     /// </summary>
+    [HideInInspector]
     public mySimpleTimer.SimpleCountdownTimer demoCountdownTimer;
-   
-    /// <summary>
-    /// Time allowed for each exercise
-    /// </summary>
-    public double gestureTime = 10;
 
     #endregion
 
@@ -298,656 +299,656 @@ public class TranslationLayer : MonoBehaviour {
     }
 #endregion
 
-#region playback related methods
+    #region playback related methods
 
-    /// <summary>
-    /// Plays the recording in memory, if a recording is in memory. 
-    /// Otherwise, logs an error message.
-    /// </summary>
-    public void playRecording()
-    {
-        //log an error message if not
-        if (playbackList != null)
+        /// <summary>
+        /// Plays the recording in memory, if a recording is in memory. 
+        /// Otherwise, logs an error message.
+        /// </summary>
+        public void playRecording()
         {
+            //log an error message if not
+            if (playbackList != null)
+            {
 
-            //ensure ZigSkeleton is not tracking
-            StopTracking();
+                //ensure ZigSkeleton is not tracking
+                StopTracking();
 
-            isPlaying = true;
+                isPlaying = true;
 
+            }
+
+            else
+            {
+                Debug.Log("Error: There is no recording in memory");
+            }
         }
 
-        else
-        {
-            Debug.Log("Error: There is no recording in memory");
-        }
-    }
-
-    
-    /// <summary>
-    /// NOTE: THIS METHOD IS DEPRECATED:
-    /// the system no longer plays back a recording; instead, in demo mode, the exercise is 
-    /// demonstrated key point at a time.
-    /// plays the current frame from the recording in memory
-    /// Note: Only invoked from TickEvent
-    /// </summary>
-    void PlayFrame()
-    {
-        if (currentFrame < playbackList.Count)//check if playback is within bounds
-        {
-            //load current frame
-            SerializeScript.SnapshotClass currFrame = playbackList[currentFrame];
-
-            //play current frame
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().PlayFrame(currFrame);
-
-            //increment frame
-            currentFrame++;
-        }
-
-        else //playback has exceeded bounds
-        {
-            resetPlayback();
-        }
         
-    }
+        /// <summary>
+        /// NOTE: THIS METHOD IS DEPRECATED:
+        /// the system no longer plays back a recording; instead, in demo mode, the exercise is 
+        /// demonstrated key point at a time.
+        /// plays the current frame from the recording in memory
+        /// Note: Only invoked from TickEvent
+        /// </summary>
+        void PlayFrame()
+        {
+            if (currentFrame < playbackList.Count)//check if playback is within bounds
+            {
+                //load current frame
+                SerializeScript.SnapshotClass currFrame = playbackList[currentFrame];
 
-    /// <summary>
-    /// This is used to demonstrate each exercise, one pose at a time.
-    /// </summary>
-    public void DemoRecording()
-    {
-        //reset the current keyframe
-        demoCurrentKeyFrame = 0;
+                //play current frame
+                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().PlayFrame(currFrame);
 
-        //check if the playlist is null
-        if (playbackList != null)
+                //increment frame
+                currentFrame++;
+            }
+
+            else //playback has exceeded bounds
+            {
+                resetPlayback();
+            }
+            
+        }
+
+        /// <summary>
+        /// This is used to demonstrate each exercise, one pose at a time.
+        /// </summary>
+        public void DemoRecording()
+        {
+            //reset the current keyframe
+            demoCurrentKeyFrame = 0;
+
+            //check if the playlist is null
+            if (playbackList != null)
+            {
+
+                //set flag to playing
+                isPlaying = true;
+
+                //StopTracking();
+
+                //make model animate
+                indicatorModelKeyPoint = 0;
+
+                StartAnimatingIndicatorModel();
+
+                //start the demotimer
+                demoCountdownTimer.StartCountdown();
+
+            }
+
+            else
+            {
+                Debug.Log("No list loaded, cannot demo");
+                
+            }
+        }
+
+        /// <summary>
+        /// This method is called by the demoCountdownTimer when it runs to 0.
+        /// It is used to make the model assume the next pose, or the T-pose if it 
+        /// has reached the end of the demo
+        /// </summary>
+        void NextGesture(object sender, EventArgs e)
+        {
+            //Make sure not to play keyframe after last keyfram
+            if (demoCurrentKeyFrame < playbackList.Count - 1)
+            {
+
+                //advance keyframe
+                demoCurrentKeyFrame++;
+
+                //make indicator animate
+                indicatorModelKeyPoint++;
+
+                StartAnimatingIndicatorModel();
+
+                //Start the counter again
+                demoCountdownTimer.StartCountdown();
+            }
+
+            //means countdown has reached last keyframe
+            else
+            {
+                //assume T-Pose
+                Debug.Log("Playback complete");
+
+                //reset keyframe
+                demoCurrentKeyFrame = 0;
+
+                //set flag to false
+                isPlaying = false;
+
+                //ResumeTracking();
+            }
+        }
+
+        /// <summary>
+        /// Stops playback and resets current frame to 0
+        /// </summary>
+        void resetPlayback()
+        {
+            isPlaying = false;
+            currentFrame = 0;
+            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().RotateToCalibrationPose();
+            ResumeTracking();
+        }
+
+        /// <summary>
+        /// Makes the given avatar jump to a key frame
+        /// </summary>
+        /// <param name="keyPointIn">Id of the key point</param>
+        /// <param name="avatarName">Name of the avatar gameObject</param>
+        public void JumpToKeyFrame(int keyPointIn, string avatarName)
         {
 
-            //set flag to playing
-            isPlaying = true;
+        }
 
-            //StopTracking();
+        /// <summary>
+        /// For testing use
+        /// Makes avatar jump to a given frame
+        /// </summary>
+        /// <param name="frameID">Index of frame to jump to </param>
+        /// <param name="avatarName">name of avatar</param>
+        public void JumpToFrame(int frameID, string avatarName)
+        {
+            GameObject.Find(avatarName).GetComponent<ZigSkeleton>().JumpToFrame(playbackList[frameID]);
+        }
+    #endregion
 
-            //make model animate
+    #region Tracking related methods
+        /// <summary>
+        /// Stops skeletal tracking, so that avatar is no longer moved by Zigfu
+        /// </summary>
+        public void StopTracking()
+        {
+            GameObject.Find(zigfuGameObjectName).GetComponent<ZigEngageSingleUser>().SkeletonTracked = false;
+        }
+
+        /// <summary>
+        /// Resumes skeletal tracking, so avatar is once again tracked by Zigfu
+        /// </summary>
+        public void ResumeTracking()
+        {
+            GameObject.Find(zigfuGameObjectName).GetComponent<ZigEngageSingleUser>().SkeletonTracked = true;
+        }
+
+    #endregion
+
+    #region Gesture tracking methods
+
+        /// <summary>
+        /// Checks if current posture matches the one of the keypoint passed in
+        /// </summary>
+        public void ListenForWholeBodyGesture()
+        {
+            //variables
+            bool isHoldingPose = false;
+
+            if (cloneCreated == false)//if the clone is not instantiated
+            {
+                //make a copy of the player avatar in the same place
+                //get position and rotation of avatar to create clone
+                Vector3 avatarPosition = 
+                    GameObject.Find(avatarGameObjectName).GetComponent<Transform>().position;
+                Quaternion avatarRotation = 
+                    GameObject.Find(avatarGameObjectName).GetComponent<Transform>().rotation;
+
+                //instantiate clone
+                gestureRecognitionClone = Instantiate(gestureRecognitionPrefab, avatarPosition, avatarRotation) as GameObject;
+
+                //make clone invisible
+                gestureRecognitionClone.GetComponentInChildren<Renderer>().enabled = false;
+
+                cloneCreated = true;//set flag to true
+            }
+
+            //check the current keypoint
+            if (keypointsList != null)
+                if (keypointsList[currentKeyPoint] != null)
+                {
+
+                    //send snapshot to be checked
+                    SerializeScript.SnapshotClass checkSnap =
+                        new SerializeScript.SnapshotClass();
+                    checkSnap = playbackList[keypointsList[currentKeyPoint].frameID]; //assign snapshot
+
+                    //make the clone assume the pose to check 
+                    gestureRecognitionClone.GetComponent<ZigSkeleton>().JumpToFrame(checkSnap);
+
+    /*                //make the template model assume pose to check
+                    GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                        .JumpToFrame(checkSnap);
+     */
+
+                    List<Transform> avatarPose =
+                        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
+
+                    List<Transform> templatePose =
+                        gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
+
+                    if (!seatedModeOn)
+                        isHoldingPose = CheckForPose(avatarPose, templatePose);
+                    else
+                    {
+                        isHoldingPose = CheckForSeatedPose(avatarPose, templatePose);
+                        //make gesture recognition clone assume seated mode
+                        gestureRecognitionClone.GetComponent<ZigSkeleton>().SeatedMode();
+                    }
+
+                    if (isHoldingPose)
+                    {
+                        feedbackText2.text = "Holding Pose!";
+                        isHoldingGesture = true; //initiate gesture
+                        listeningForGesture = false; //disable listening for gesture
+                    }
+
+                    else
+                        feedbackText2.text = "Not holding Pose";
+                }
+
+                else
+                    listeningForWholeBodyGesture = false;
+
+            else
+                listeningForWholeBodyGesture = false;
+        }
+
+        /// <summary>
+        /// Makes system start listening for a full body gesture
+        /// </summary>
+        public void StartListeningForWholeBodyGesture()
+        {
+            //Play sounds!
+            systemSounds.PlayGameStartSound();
+            systemSounds.PlayGameBackgroundNoise();
+            systemSounds.PlayGameMusic();
+
+            //set current keyPoint to 0
+            currentKeyPoint = 0;
+
+            //make carl assume the keypoint pose
             indicatorModelKeyPoint = 0;
 
             StartAnimatingIndicatorModel();
 
-            //start the demotimer
-            demoCountdownTimer.StartCountdown();
+            //make listening=true
+            listeningForWholeBodyGesture = true;
 
+            isCheckingForExercise = true;
+
+            exerciseScore = 0; //reset score to 0
+
+            //make timer count down
+            countdownTimer.StartCountdown();
         }
 
-        else
-        {
-            Debug.Log("No list loaded, cannot demo");
-            
-        }
-    }
-
-    /// <summary>
-    /// This method is called by the demoCountdownTimer when it runs to 0.
-    /// It is used to make the model assume the next pose, or the T-pose if it 
-    /// has reached the end of the demo
-    /// </summary>
-    void NextGesture(object sender, EventArgs e)
-    {
-        //Make sure not to play keyframe after last keyfram
-        if (demoCurrentKeyFrame < playbackList.Count - 1)
+        /// <summary>
+        /// Checks if avatar and template are holding the same pose, In seated mode
+        /// </summary>
+        /// <param name="avatarPose">pose of player avatar</param>
+        /// <param name="templatePose">pose of template avatar to check against</param>
+        /// <returns>Boolean, true if user is holding gesture and false if not</returns>
+        public bool CheckForSeatedPose(List<Transform> avatarPose, List<Transform> templatePose)
         {
 
-            //advance keyframe
-            demoCurrentKeyFrame++;
+            float sum = 0; //sum of the distance between poses
 
-            //make indicator animate
-            indicatorModelKeyPoint++;
 
-            StartAnimatingIndicatorModel();
-
-            //Start the counter again
-            demoCountdownTimer.StartCountdown();
-        }
-
-        //means countdown has reached last keyframe
-        else
-        {
-            //assume T-Pose
-            Debug.Log("Playback complete");
-
-            //reset keyframe
-            demoCurrentKeyFrame = 0;
-
-            //set flag to false
-            isPlaying = false;
-
-            //ResumeTracking();
-        }
-    }
-
-    /// <summary>
-    /// Stops playback and resets current frame to 0
-    /// </summary>
-    void resetPlayback()
-    {
-        isPlaying = false;
-        currentFrame = 0;
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().RotateToCalibrationPose();
-        ResumeTracking();
-    }
-
-    /// <summary>
-    /// Makes the given avatar jump to a key frame
-    /// </summary>
-    /// <param name="keyPointIn">Id of the key point</param>
-    /// <param name="avatarName">Name of the avatar gameObject</param>
-    public void JumpToKeyFrame(int keyPointIn, string avatarName)
-    {
-
-    }
-
-    /// <summary>
-    /// For testing use
-    /// Makes avatar jump to a given frame
-    /// </summary>
-    /// <param name="frameID">Index of frame to jump to </param>
-    /// <param name="avatarName">name of avatar</param>
-    public void JumpToFrame(int frameID, string avatarName)
-    {
-        GameObject.Find(avatarName).GetComponent<ZigSkeleton>().JumpToFrame(playbackList[frameID]);
-    }
-#endregion
-
-#region Tracking related methods
-    /// <summary>
-    /// Stops skeletal tracking, so that avatar is no longer moved by Zigfu
-    /// </summary>
-    public void StopTracking()
-    {
-        GameObject.Find(zigfuGameObjectName).GetComponent<ZigEngageSingleUser>().SkeletonTracked = false;
-    }
-
-    /// <summary>
-    /// Resumes skeletal tracking, so avatar is once again tracked by Zigfu
-    /// </summary>
-    public void ResumeTracking()
-    {
-        GameObject.Find(zigfuGameObjectName).GetComponent<ZigEngageSingleUser>().SkeletonTracked = true;
-    }
-
-#endregion
-
-#region Gesture tracking methods
-
-    /// <summary>
-    /// Checks if current posture matches the one of the keypoint passed in
-    /// </summary>
-    public void ListenForWholeBodyGesture()
-    {
-        //variables
-        bool isHoldingPose = false;
-
-        if (cloneCreated == false)//if the clone is not instantiated
-        {
-            //make a copy of the player avatar in the same place
-            //get position and rotation of avatar to create clone
-            Vector3 avatarPosition = 
-                GameObject.Find(avatarGameObjectName).GetComponent<Transform>().position;
-            Quaternion avatarRotation = 
-                GameObject.Find(avatarGameObjectName).GetComponent<Transform>().rotation;
-
-            //instantiate clone
-            gestureRecognitionClone = Instantiate(gestureRecognitionPrefab, avatarPosition, avatarRotation) as GameObject;
-
-            //make clone invisible
-            gestureRecognitionClone.GetComponentInChildren<Renderer>().enabled = false;
-
-            cloneCreated = true;//set flag to true
-        }
-
-        //check the current keypoint
-        if (keypointsList != null)
-            if (keypointsList[currentKeyPoint] != null)
+            for (int i = 0; i < avatarPose.Count; i++)
             {
 
-                //send snapshot to be checked
-                SerializeScript.SnapshotClass checkSnap =
-                    new SerializeScript.SnapshotClass();
-                checkSnap = playbackList[keypointsList[currentKeyPoint].frameID]; //assign snapshot
+                if (i < templatePose.Count)
+                {
+                    sum += Vector3.Distance(avatarPose[i].position, templatePose[i].position);
+                }
+            }
 
-                //make the clone assume the pose to check 
-                gestureRecognitionClone.GetComponent<ZigSkeleton>().JumpToFrame(checkSnap);
+            //GUI text it!
+            //feedbackText1.text = sum.ToString();
 
-/*                //make the template model assume pose to check
-                GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-                    .JumpToFrame(checkSnap);
- */
+            //check if it is below threshold
+            if (sum < seatedGestureRecognitionThreshold)
+            {
+                //This means user is holding gesture
+                return true;
+            }
 
+            else
+            {
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Checks if avatar and template are holding the same pose
+        /// </summary>
+        /// <param name="avatarPose">pose of player avatar</param>
+        /// <param name="templatePose">pose of template avatar to check against</param>
+        /// <returns>Boolean, true if user is holding gesture and false if not</returns>
+        public bool CheckForPose(List<Transform> avatarPose, List<Transform> templatePose)
+        {
+            float sum = 0; //sum of the distance between poses
+
+            for (int i = 0; i < avatarPose.Count; i++)
+            {
+                if (i < templatePose.Count)
+                {
+                    sum += Vector3.Distance(avatarPose[i].position, templatePose[i].position);
+                }
+            }
+
+            //GUI text it!
+            //feedbackText1.text = sum.ToString();
+           
+            //check if it is below threshold
+            if (sum < gestureRecognitionThreshold)
+            {
+                //This means user is holding gesture
+                return true;
+            }
+
+            else 
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if user holds a pose for a set duration
+        /// Executed by tickEvent
+        /// </summary>
+        public void CheckForGesture()
+        {
+            if (gestureCount < gestureHoldLength)
+            {
+                //get data to check for pose
                 List<Transform> avatarPose =
-                    GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
+        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
 
                 List<Transform> templatePose =
                     gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
 
+                //check if seated mode
                 if (!seatedModeOn)
-                    isHoldingPose = CheckForPose(avatarPose, templatePose);
-                else
                 {
-                    isHoldingPose = CheckForSeatedPose(avatarPose, templatePose);
-                    //make gesture recognition clone assume seated mode
-                    gestureRecognitionClone.GetComponent<ZigSkeleton>().SeatedMode();
-                }
-
-                if (isHoldingPose)
-                {
-                    feedbackText2.text = "Holding Pose!";
-                    isHoldingGesture = true; //initiate gesture
-                    listeningForGesture = false; //disable listening for gesture
+                    //if holding gesture add to the score
+                    if (CheckForPose(avatarPose, templatePose))
+                    {
+                        gestureScore++;
+                    }
                 }
 
                 else
-                    feedbackText2.text = "Not holding Pose";
-            }
-
-            else
-                listeningForWholeBodyGesture = false;
-
-        else
-            listeningForWholeBodyGesture = false;
-    }
-
-    /// <summary>
-    /// Makes system start listening for a full body gesture
-    /// </summary>
-    public void StartListeningForWholeBodyGesture()
-    {
-        //Play sounds!
-        systemSounds.PlayGameStartSound();
-        systemSounds.PlayGameBackgroundNoise();
-        systemSounds.PlayGameMusic();
-
-        //set current keyPoint to 0
-        currentKeyPoint = 0;
-
-        //make carl assume the keypoint pose
-        indicatorModelKeyPoint = 0;
-
-        StartAnimatingIndicatorModel();
-
-        //make listening=true
-        listeningForWholeBodyGesture = true;
-
-        isCheckingForExercise = true;
-
-        exerciseScore = 0; //reset score to 0
-
-        //make timer count down
-        countdownTimer.StartCountdown();
-    }
-
-    /// <summary>
-    /// Checks if avatar and template are holding the same pose, In seated mode
-    /// </summary>
-    /// <param name="avatarPose">pose of player avatar</param>
-    /// <param name="templatePose">pose of template avatar to check against</param>
-    /// <returns>Boolean, true if user is holding gesture and false if not</returns>
-    public bool CheckForSeatedPose(List<Transform> avatarPose, List<Transform> templatePose)
-    {
-
-        float sum = 0; //sum of the distance between poses
-
-
-        for (int i = 0; i < avatarPose.Count; i++)
-        {
-
-            if (i < templatePose.Count)
-            {
-                sum += Vector3.Distance(avatarPose[i].position, templatePose[i].position);
-            }
-        }
-
-        //GUI text it!
-        //feedbackText1.text = sum.ToString();
-
-        //check if it is below threshold
-        if (sum < gestureRecognitionThreshold)
-        {
-            //This means user is holding gesture
-            return true;
-        }
-
-        else
-        {
-            return false;
-        }
-    }
-    
-    /// <summary>
-    /// Checks if avatar and template are holding the same pose
-    /// </summary>
-    /// <param name="avatarPose">pose of player avatar</param>
-    /// <param name="templatePose">pose of template avatar to check against</param>
-    /// <returns>Boolean, true if user is holding gesture and false if not</returns>
-    public bool CheckForPose(List<Transform> avatarPose, List<Transform> templatePose)
-    {
-        float sum = 0; //sum of the distance between poses
-
-        for (int i = 0; i < avatarPose.Count; i++)
-        {
-            if (i < templatePose.Count)
-            {
-                sum += Vector3.Distance(avatarPose[i].position, templatePose[i].position);
-            }
-        }
-
-        //GUI text it!
-        //feedbackText1.text = sum.ToString();
-       
-        //check if it is below threshold
-        if (sum < gestureRecognitionThreshold)
-        {
-            //This means user is holding gesture
-            return true;
-        }
-
-        else 
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// Checks if user holds a pose for a set duration
-    /// Executed by tickEvent
-    /// </summary>
-    public void CheckForGesture()
-    {
-        if (gestureCount < gestureHoldLength)
-        {
-            //get data to check for pose
-            List<Transform> avatarPose =
-    GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
-
-            List<Transform> templatePose =
-                gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
-
-            //check if seated mode
-            if (!seatedModeOn)
-            {
-                //if holding gesture add to the score
-                if (CheckForPose(avatarPose, templatePose))
                 {
-                    gestureScore++;
+                    //if holding gesture add to the score
+                    if (CheckForSeatedPose(avatarPose, templatePose))
+                    {
+                        gestureScore++;
+                    }
                 }
+
+                //increment count
+                gestureCount++;
+
             }
 
             else
             {
-                //if holding gesture add to the score
-                if (CheckForSeatedPose(avatarPose, templatePose))
+                //check if gesture is succesful
+                double gestureCheck = gestureScore / gestureCount;
+
+                //stop checking for gesture
+                isHoldingGesture = false;
+                listeningForWholeBodyGesture = true;
+
+                //reset count
+                gestureCount = 0;
+                gestureScore = 0;
+
+                //if gesture is succesful, do whatever
+                if (gestureCheck >= gestureAccuracy)
                 {
-                    gestureScore++;
+                    Debug.Log("Gesture success!");
+                    GestureHeldEvent();
                 }
+
+                else
+                {
+                    Debug.Log("Gesture failed");
+                }
+
+
+            }
+        }
+
+        /// <summary>
+        /// This event is called by CheckForGesture. 
+        /// 
+        /// If the user holds the gesture for a defined length of time (gestureHoldLength),
+        ///     CheckForGesture will calculate a score of how accurately the pose was held.
+        ///     If the accuracy is greater than gestureAccuracy this method is called.
+        ///     
+        /// This method also plays a sound, systemSounds.soundOnSuccesfulGesture
+        ///     
+        /// This method advances the current keyPoint to the next, and shows that the player
+        ///     succesfully did a part of an exercise
+        /// </summary>
+        public void GestureHeldEvent()
+        {
+            feedbackText1.text = "Succesful Gesture!";
+
+            exerciseScore++; //add to score
+
+            systemSounds.PlayGestureSuccessSound(); //play the sound
+
+            //advance to next keypoint
+            Debug.Log("Gesture Succesful! " + currentKeyPoint + " " + indicatorModelKeyPoint);
+
+            if (currentKeyPoint < keypointsList.Count - 1)
+            {
+                currentKeyPoint++; //increment current keypoint
+
+                indicatorModelKeyPoint++;
+
+                StartAnimatingIndicatorModel();
+
+                countdownTimer.ResetTimer();//reset timer
             }
 
-            //increment count
-            gestureCount++;
+            else //finished holding gestures
+            {
+                ExerciseHeldEvent();//
+                countdownTimer.StopCountdown();
+            }
+            
+        }
+
+        /// <summary>
+        /// This event is called by TimerZeroEvent. 
+        /// If the timer reaches 0 and the pose is not succesfully held, 
+        ///     this method is called. 
+        ///     
+        /// The method also plays a sound - systemSounds.soundOnFailedGesture
+        /// 
+        /// This method has to do the same as GestureHeldEvent except that
+        ///     it says gesture not held.
+        /// </summary>
+        public void GestureNotHeldEvent()
+        {
+            //advance to next keypoint
+            Debug.Log("Not succesful " + currentKeyPoint + " " + indicatorModelKeyPoint);
+
+            feedbackText1.text = "Gesture Not held succesfully, moving on";
+
+            systemSounds.PlayGestureFailSound(); //play sound
+
+
+            if (currentKeyPoint < keypointsList.Count - 1)
+            {
+                currentKeyPoint++; //increment current keypoint
+
+                indicatorModelKeyPoint++;
+
+                StartAnimatingIndicatorModel();
+
+                countdownTimer.SetStartTime(gestureHoldLength);
+
+                countdownTimer.StartCountdown();
+            }
+
+            else //finished holding gestures
+            {
+                ExerciseHeldEvent();//
+                countdownTimer.StopCountdown();
+            }
+        }
+
+        /// <summary>
+        /// This is called if the user succesfully holds an entire exercise. This method is
+        ///     called from GestureHeldEvent()
+        /// </summary>
+        public void ExerciseHeldEvent()
+        {
+            Debug.Log("Exercise Complete:  " + exerciseScore + " / " + keypointsList.Count);
+            listeningForWholeBodyGesture = false; //stop listening
+            isCheckingForExercise = false;
+            feedbackText1.text = "Exercise Complete:  " + exerciseScore + " / " + keypointsList.Count;
+        
+            //stop playing some sounds
+            systemSounds.StopAmbientMusic();
+
+            //play sound
+            systemSounds.PlayGameEndSound();
+            systemSounds.PlayMusic();
+            systemSounds.PlayBackgroundNoise();
+        }
+
+        /// <summary>
+        /// Updates text on the GUIText control to match that in the avatar
+        /// </summary>
+        public void UpdateGuiText()
+        {
+            string textIn =
+                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .GUIOutputText1;
+
+            feedbackText1.text = textIn;
+
+            textIn =
+                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                .GUIOutputText2;
+
+            //Declare the SoundScript
+            systemSounds = GameObject.Find(soundGameObjectName).GetComponent<SoundScript>();
+
+            feedbackText2.text = textIn;
+
+        }
+        #endregion
+
+    #region animation related methods
+
+        /// <summary>
+        /// This method smoothly animates the indicator model as per the animation recorded by the
+        ///     therapist, until it reaches the required keypoint.
+        /// </summary>
+        /// <param name="KeypointIn"></param>
+        public void StartAnimatingIndicatorModel()
+        {
+
+            isAnimatingIndicatorModel = true;
+
+            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>().animateSpeed = 
+                indicatorAnimateSpeed;
 
         }
 
-        else
+        /// <summary>
+        /// This method is called by tickEvent, and it smoothly animates the indicator model until the
+        ///     frame in indicatorModelKeyPoint is reached.
+        /// </summary>
+        public void AnimateIndicatorModel()
         {
-            //check if gesture is succesful
-            double gestureCheck = gestureScore / gestureCount;
+            
+            //make the avatar jump to the frame passed in.
+            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                .AnimateToFrame(playbackList[keypointsList[indicatorModelKeyPoint].frameID]);
 
-            //stop checking for gesture
-            isHoldingGesture = false;
-            listeningForWholeBodyGesture = true;
+        }
 
-            //reset count
-            gestureCount = 0;
-            gestureScore = 0;
+        #endregion
 
-            //if gesture is succesful, do whatever
-            if (gestureCheck >= gestureAccuracy)
+    #region timing related methods
+
+        /// <summary>
+        /// This event handler is called if the countdown timer reaches 0
+        /// 
+        /// It checks if the system is checking for an exercise. If it is doing so,
+        ///     it calls the GestureNotHeldEvent
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TimerZeroEvent(object sender, EventArgs e)
+        {
+            Debug.Log("Timer is 0!");
+            countdownTimer.StopCountdown();
+            if (isCheckingForExercise)
             {
-                Debug.Log("Gesture success!");
-                GestureHeldEvent();
+                GestureNotHeldEvent();
+            }
+        }
+
+        /// <summary>
+        /// This event is fired regularly, and keeps time when playing
+        /// </summary>
+        public void TickEvent()
+        {
+            if (listeningForWholeBodyGesture)
+                ListenForWholeBodyGesture();
+
+            if (isHoldingGesture)
+                CheckForGesture();
+
+            if (isAnimatingIndicatorModel)
+                AnimateIndicatorModel();
+
+            //seated mode
+            if (seatedModeOn)
+            {
+                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                    .SeatedMode();
+                GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+        .SeatedMode();
             }
 
             else
             {
-                Debug.Log("Gesture failed");
+                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                    .DisableSeatedMode();
+                GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                    .DisableSeatedMode();
             }
-
-
-        }
-    }
-
-    /// <summary>
-    /// This event is called by CheckForGesture. 
-    /// 
-    /// If the user holds the gesture for a defined length of time (gestureHoldLength),
-    ///     CheckForGesture will calculate a score of how accurately the pose was held.
-    ///     If the accuracy is greater than gestureAccuracy this method is called.
-    ///     
-    /// This method also plays a sound, systemSounds.soundOnSuccesfulGesture
-    ///     
-    /// This method advances the current keyPoint to the next, and shows that the player
-    ///     succesfully did a part of an exercise
-    /// </summary>
-    public void GestureHeldEvent()
-    {
-        feedbackText1.text = "Succesful Gesture!";
-
-        exerciseScore++; //add to score
-
-        systemSounds.PlayGestureSuccessSound(); //play the sound
-
-        //advance to next keypoint
-        Debug.Log("Gesture Succesful! " + currentKeyPoint + " " + indicatorModelKeyPoint);
-
-        if (currentKeyPoint < keypointsList.Count - 1)
-        {
-            currentKeyPoint++; //increment current keypoint
-
-            indicatorModelKeyPoint++;
-
-            StartAnimatingIndicatorModel();
-
-            countdownTimer.ResetTimer();//reset timer
+            //UpdateGuiText();
         }
 
-        else //finished holding gestures
-        {
-            ExerciseHeldEvent();//
-            countdownTimer.StopCountdown();
-        }
-        
-    }
+        #endregion
 
-    /// <summary>
-    /// This event is called by TimerZeroEvent. 
-    /// If the timer reaches 0 and the pose is not succesfully held, 
-    ///     this method is called. 
-    ///     
-    /// The method also plays a sound - systemSounds.soundOnFailedGesture
-    /// 
-    /// This method has to do the same as GestureHeldEvent except that
-    ///     it says gesture not held.
-    /// </summary>
-    public void GestureNotHeldEvent()
-    {
-        //advance to next keypoint
-        Debug.Log("Not succesful " + currentKeyPoint + " " + indicatorModelKeyPoint);
-
-        feedbackText1.text = "Gesture Not held succesfully, moving on";
-
-        systemSounds.PlayGestureFailSound(); //play sound
+    #region Sound related methods
 
 
-        if (currentKeyPoint < keypointsList.Count - 1)
-        {
-            currentKeyPoint++; //increment current keypoint
-
-            indicatorModelKeyPoint++;
-
-            StartAnimatingIndicatorModel();
-
-            countdownTimer.SetStartTime(gestureTime);
-
-            countdownTimer.StartCountdown();
-        }
-
-        else //finished holding gestures
-        {
-            ExerciseHeldEvent();//
-            countdownTimer.StopCountdown();
-        }
-    }
-
-    /// <summary>
-    /// This is called if the user succesfully holds an entire exercise. This method is
-    ///     called from GestureHeldEvent()
-    /// </summary>
-    public void ExerciseHeldEvent()
-    {
-        Debug.Log("Exercise Complete:  " + exerciseScore + " / " + keypointsList.Count);
-        listeningForWholeBodyGesture = false; //stop listening
-        isCheckingForExercise = false;
-        feedbackText1.text = "Exercise Complete:  " + exerciseScore + " / " + keypointsList.Count;
-    
-        //stop playing some sounds
-        systemSounds.StopAmbientMusic();
-
-        //play sound
-        systemSounds.PlayGameEndSound();
-        systemSounds.PlayMusic();
-        systemSounds.PlayBackgroundNoise();
-    }
-
-    /// <summary>
-    /// Updates text on the GUIText control to match that in the avatar
-    /// </summary>
-    public void UpdateGuiText()
-    {
-        string textIn =
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
-            .GUIOutputText1;
-
-        feedbackText1.text = textIn;
-
-        textIn =
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
-            .GUIOutputText2;
-
-        //Declare the SoundScript
-        systemSounds = GameObject.Find(soundGameObjectName).GetComponent<SoundScript>();
-
-        feedbackText2.text = textIn;
-
-    }
-    #endregion
-
-#region animation related methods
-
-    /// <summary>
-    /// This method smoothly animates the indicator model as per the animation recorded by the
-    ///     therapist, until it reaches the required keypoint.
-    /// </summary>
-    /// <param name="KeypointIn"></param>
-    public void StartAnimatingIndicatorModel()
-    {
-
-        isAnimatingIndicatorModel = true;
-
-        GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>().animateSpeed = 
-            indicatorAnimateSpeed;
-
-    }
-
-    /// <summary>
-    /// This method is called by tickEvent, and it smoothly animates the indicator model until the
-    ///     frame in indicatorModelKeyPoint is reached.
-    /// </summary>
-    public void AnimateIndicatorModel()
-    {
-        
-        //make the avatar jump to the frame passed in.
-        GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-            .AnimateToFrame(playbackList[keypointsList[indicatorModelKeyPoint].frameID]);
-
-    }
 
     #endregion
-
-#region timing related methods
-
-    /// <summary>
-    /// This event handler is called if the countdown timer reaches 0
-    /// 
-    /// It checks if the system is checking for an exercise. If it is doing so,
-    ///     it calls the GestureNotHeldEvent
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public void TimerZeroEvent(object sender, EventArgs e)
-    {
-        Debug.Log("Timer is 0!");
-        countdownTimer.StopCountdown();
-        if (isCheckingForExercise)
-        {
-            GestureNotHeldEvent();
-        }
-    }
-
-    /// <summary>
-    /// This event is fired regularly, and keeps time when playing
-    /// </summary>
-    public void TickEvent()
-    {
-        if (listeningForWholeBodyGesture)
-            ListenForWholeBodyGesture();
-
-        if (isHoldingGesture)
-            CheckForGesture();
-
-        if (isAnimatingIndicatorModel)
-            AnimateIndicatorModel();
-
-        //seated mode
-        if (seatedModeOn)
-        {
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
-                .SeatedMode();
-            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-    .SeatedMode();
-        }
-
-        else
-        {
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
-                .DisableSeatedMode();
-            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-                .DisableSeatedMode();
-        }
-        //UpdateGuiText();
-    }
-
-    #endregion
-
-#region Sound related methods
-
-
-
-#endregion
 
     // Use this for initialization
 void Start () {
 
         //init the countdown timers
         countdownTimer = new mySimpleTimer.SimpleCountdownTimer();
-        countdownTimer.StartMethod(gestureTime, 
+        countdownTimer.StartMethod(gestureHoldLength, 
             new mySimpleTimer.SimpleCountdownTimer.TimerEventHandler(TimerZeroEvent));
 
         demoCountdownTimer = new mySimpleTimer.SimpleCountdownTimer();
