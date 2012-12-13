@@ -465,7 +465,7 @@ public class ButtonScript : MonoBehaviour
 		playPauseButton.setPos(200, Screen.height - 85);
 		
 		//set the keypointslist position dynamically
-		keyPointsList.setPos(Screen.width - 250, 10);
+		//keyPointsList.setPos(Screen.width - 250, 10);
     }
 
     /// <summary>
