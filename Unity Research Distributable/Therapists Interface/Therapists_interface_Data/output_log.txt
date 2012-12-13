@@ -22,7 +22,7 @@ Platform assembly: C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Resea
 Loading C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research Distributable\Therapists Interface\Therapists_interface_Data\Managed\OpenNI.Net.dll into Unity Child Domain
 Platform assembly: C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research Distributable\Therapists Interface\Therapists_interface_Data\Managed\ZDK.dll (this message is harmless)
 Loading C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research Distributable\Therapists Interface\Therapists_interface_Data\Managed\ZDK.dll into Unity Child Domain
-- Completed reload, in  0.088 seconds
+- Completed reload, in  0.097 seconds
 Trying to open Kinect sensor using MS Kinect SDK
  
 (Filename: C:/BuildAgent/work/14194e8ce88cdf47/Runtime/ExportGenerated/StandalonePlayer/UnityEngineDebug.cpp Line: 43)
