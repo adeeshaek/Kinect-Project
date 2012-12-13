@@ -192,11 +192,7 @@ public class ZigSkeleton : MonoBehaviour
     {
 
         //now set all of the lowerbody points to null
-<<<<<<< HEAD
         /*
-=======
-
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
         transforms[(int)ZigJointId.Waist] = null;
         transforms[(int)ZigJointId.LeftHip] = null;
         transforms[(int)ZigJointId.LeftKnee] = null;
@@ -206,7 +202,6 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightKnee] = null;
         transforms[(int)ZigJointId.RightAnkle] = null;
         transforms[(int)ZigJointId.RightFoot] = null;
-<<<<<<< HEAD
         */
         Waist = null;
 
@@ -219,9 +214,7 @@ public class ZigSkeleton : MonoBehaviour
         RightKnee = null;
         RightAnkle = null;
         RightFoot = null;
-=======
 
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
 
     }
 
@@ -235,10 +228,9 @@ public class ZigSkeleton : MonoBehaviour
     {
 
         //restore the backupTransformList
-<<<<<<< HEAD
+
         /*
-=======
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
+
         transforms[(int)ZigJointId.Waist] = Waist;
         transforms[(int)ZigJointId.LeftHip] = LeftHip;
         transforms[(int)ZigJointId.LeftKnee] = LeftKnee;
@@ -247,17 +239,13 @@ public class ZigSkeleton : MonoBehaviour
         transforms[(int)ZigJointId.RightHip] = RightHip;
         transforms[(int)ZigJointId.RightKnee] = RightKnee;
         transforms[(int)ZigJointId.RightAnkle] = RightAnkle;
-        transforms[(int)ZigJointId.RightFoot] = RightFoot;
-<<<<<<< HEAD
-         */
+        transforms[(int)ZigJointId.RightFoot] = RightFoot
+		 */
+
+
 
     }
 
-=======
-
-
-    }
->>>>>>> 6607f72ce632873cb25bd0b01dd1b05f483647fa
 
     /// <summary>
     /// Makes the avatar assume the pose recorded in the frame passed in

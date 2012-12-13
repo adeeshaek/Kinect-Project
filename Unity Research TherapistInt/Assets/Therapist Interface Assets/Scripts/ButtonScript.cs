@@ -459,7 +459,13 @@ public class ButtonScript : MonoBehaviour
         playPauseButton.clickEventHandler += new myGUIControls.ComplexButtonEventHandler(PlayPauseButtonClicked);
         slider.SliderEventHandler += new myGUIControls.IBoxSliderEventHandler(SliderValueChanged);
         loadSaveDialog.saveButtonEventHandler +=new myGUIControls.SaveButtonEventHandler(LoadSaveDialogItemSelected);
-
+		
+		//set the slider and playpausebutton position dynamically
+		slider.setSliderPos(330, Screen.height - 70);
+		playPauseButton.setPos(200, Screen.height - 85);
+		
+		//set the keypointslist position dynamically
+		keyPointsList.setPos(Screen.width - 250, 10);
     }
 
     /// <summary>

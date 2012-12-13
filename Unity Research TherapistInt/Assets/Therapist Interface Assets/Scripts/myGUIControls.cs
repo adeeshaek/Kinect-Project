@@ -98,6 +98,21 @@ public class myGUIControls : MonoBehaviour
         /// Handles event when clicked
         /// </summary>
         public event ComplexButtonEventHandler clickEventHandler;
+		
+		/// <summary>
+		/// Sets the position of the button on screen
+		/// </summary>
+		/// <param name='Xin'>
+		/// The X param
+		/// </param>
+		/// <param name='Yin'>
+		/// The Y param
+		/// </param>
+		public void setPos(int Xin, int Yin)
+		{
+			X = Xin;
+			Y = Yin;
+		}
 
         /// <summary>
         /// Draws the control
@@ -172,6 +187,21 @@ public class myGUIControls : MonoBehaviour
         /// Event handler for when value is changed
         /// </summary>
         public event IBoxSliderEventHandler SliderEventHandler;
+		
+		/// <summary>
+		/// Sets the screen position of the slider
+		/// </summary>
+		/// <param name='Xin'>
+		/// X position
+		/// </param>
+		/// <param name='Yin'>
+		/// Y position
+		/// </param>
+		public void setSliderPos(int Xin, int Yin)
+		{
+			X = Xin;
+			Y = Yin;
+		}
 
         /// <summary>
         /// Passes event raised when slider value is changed
@@ -607,6 +637,21 @@ public class myGUIControls : MonoBehaviour
         /// Defines type of Event handler for the event raised when a user selects an item in the list
         /// </summary>
         public event GUIListItemSelectedEventHandler listItemSelectedEventHandler;
+		
+		/// <summary>
+		/// Sets the position dynamically
+		/// </summary>
+		/// <param name='Xin'>
+		/// X param
+		/// </param>
+		/// <param name='Yin'>
+		/// Y param
+		/// </param>
+		public void setPos(int Xin, int Yin)
+		{
+			X = Xin;
+			Y = Yin;
+		}
 
         /// <summary>
         /// Event handler for event raised when user selects a list element
