@@ -12,4 +12,4 @@ Toby March
 
 This project also uses the wonderful zigfu library for Kinect and Unity3d.
 
-
+To see what remains to be done, please follow this link https://github.com/adeeshaek/Kinect-Project/wiki/To-do-list
