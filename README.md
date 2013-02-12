@@ -14,4 +14,4 @@ This project also uses the wonderful zigfu library for Kinect and Unity3d.
 
 To see what remains to be done, please follow this link https://github.com/adeeshaek/Kinect-Project/wiki/To-do-list
 
-We also have a wonderful youtube video made by Aaron Mansur: http://www.youtube.com/watch?v=Vm_pGwDuP04
+We also have a youtube video made by Aaron Mansur: http://www.youtube.com/watch?v=Vm_pGwDuP04
