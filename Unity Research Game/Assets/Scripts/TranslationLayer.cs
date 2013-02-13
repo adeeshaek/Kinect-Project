@@ -340,7 +340,7 @@ public class TranslationLayer : MonoBehaviour {
                 SerializeScript.SnapshotClass currFrame = playbackList[currentFrame];
 
                 //play current frame
-                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().PlayFrame(currFrame);
+                GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().PlayFrame(currFrame);
 
                 //increment frame
                 currentFrame++;
@@ -455,7 +455,7 @@ public class TranslationLayer : MonoBehaviour {
         /// <param name="avatarName">name of avatar</param>
         public void JumpToFrame(int frameID, string avatarName)
         {
-            GameObject.Find(avatarName).GetComponent<ZigSkeleton>().JumpToFrame(playbackList[frameID]);
+            GameObject.Find(avatarName).GetComponent<ExtendedZigSkeleton>().JumpToFrame(playbackList[frameID]);
         }
     #endregion
 
@@ -517,7 +517,7 @@ public class TranslationLayer : MonoBehaviour {
                     checkSnap = playbackList[keypointsList[currentKeyPoint].frameID]; //assign snapshot
 
                     //make the clone assume the pose to check 
-                    gestureRecognitionClone.GetComponent<ZigSkeleton>().JumpToFrame(checkSnap);
+                    gestureRecognitionClone.GetComponent<ExtendedZigSkeleton>().JumpToFrame(checkSnap);
 
     /*                //make the template model assume pose to check
                     GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
@@ -525,10 +525,10 @@ public class TranslationLayer : MonoBehaviour {
      */
 
                     List<Transform> avatarPose =
-                        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
+                        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().ReturnTransformsList();
 
                     List<Transform> templatePose =
-                        gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
+                        gestureRecognitionClone.GetComponent<ExtendedZigSkeleton>().ReturnTransformsList();
 
                     if (!seatedModeOn)
                         isHoldingPose = CheckForPose(avatarPose, templatePose);
@@ -536,7 +536,7 @@ public class TranslationLayer : MonoBehaviour {
                     {
                         isHoldingPose = CheckForSeatedPose(avatarPose, templatePose);
                         //make gesture recognition clone assume seated mode
-                        gestureRecognitionClone.GetComponent<ZigSkeleton>().SeatedMode();
+                        gestureRecognitionClone.GetComponent<ExtendedZigSkeleton>().SeatedMode();
                     }
 
                     if (isHoldingPose)
@@ -667,10 +667,10 @@ public class TranslationLayer : MonoBehaviour {
             {
                 //get data to check for pose
                 List<Transform> avatarPose =
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ReturnTransformsList();
+        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().ReturnTransformsList();
 
                 List<Transform> templatePose =
-                    gestureRecognitionClone.GetComponent<ZigSkeleton>().ReturnTransformsList();
+                    gestureRecognitionClone.GetComponent<ExtendedZigSkeleton>().ReturnTransformsList();
 
                 //check if seated mode
                 if (!seatedModeOn)
@@ -833,13 +833,13 @@ public class TranslationLayer : MonoBehaviour {
         public void UpdateGuiText()
         {
             string textIn =
-                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
                 .GUIOutputText1;
 
             feedbackText1.text = textIn;
 
             textIn =
-                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
                 .GUIOutputText2;
 
             //Declare the SoundScript
@@ -862,7 +862,7 @@ public class TranslationLayer : MonoBehaviour {
 
             isAnimatingIndicatorModel = true;
 
-            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>().animateSpeed = 
+            GameObject.Find(indicatorGameObjectName).GetComponent<ExtendedZigSkeleton>().animateSpeed = 
                 indicatorAnimateSpeed;
 
         }
@@ -875,7 +875,7 @@ public class TranslationLayer : MonoBehaviour {
         {
             
             //make the avatar jump to the frame passed in.
-            GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+            GameObject.Find(indicatorGameObjectName).GetComponent<ExtendedZigSkeleton>()
                 .AnimateToFrame(playbackList[keypointsList[indicatorModelKeyPoint].frameID]);
 
         }
@@ -919,17 +919,17 @@ public class TranslationLayer : MonoBehaviour {
             //seated mode
             if (seatedModeOn)
             {
-                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
                     .SeatedMode();
-                GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(indicatorGameObjectName).GetComponent<ExtendedZigSkeleton>()
         .SeatedMode();
             }
 
             else
             {
-                GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
                     .DisableSeatedMode();
-                GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
+                GameObject.Find(indicatorGameObjectName).GetComponent<ExtendedZigSkeleton>()
                     .DisableSeatedMode();
             }
             //UpdateGuiText();
