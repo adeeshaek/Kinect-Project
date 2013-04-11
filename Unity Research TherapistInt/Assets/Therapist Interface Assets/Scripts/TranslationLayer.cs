@@ -275,7 +275,7 @@ public class TranslationLayer : MonoBehaviour {
     }
 #endregion
 
-#region playback related methods
+    #region playback related methods
 
     /// <summary>
     /// Plays the recording in memory, if a recording is in memory. 
@@ -312,7 +312,7 @@ public class TranslationLayer : MonoBehaviour {
             SerializeScript.SnapshotClass currFrame = playbackList[currentFrame];
 
             //play current frame
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().PlayFrame(currFrame);
+            GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().PlayFrame(currFrame);
 
             //increment frame
             currentFrame++;
@@ -461,7 +461,7 @@ public class TranslationLayer : MonoBehaviour {
             playbackList.Clear();
 
         //clear the recording list
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().ClearRecordingList();
+        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().ClearRecordingList();
     }
 
     /// <summary>
@@ -480,7 +480,7 @@ public class TranslationLayer : MonoBehaviour {
         playbackList = new List<SerializeScript.SnapshotClass>();
 
         playbackList =
-            GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+            GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
             .ReturnRecordedList();
     }
 
@@ -514,7 +514,7 @@ public class TranslationLayer : MonoBehaviour {
         recordList.Add(thisFrame);
         Debug.Log(recordList.Count);
          */
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().SetTick(); 
+        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>().SetTick(); 
     }
 
     #endregion
@@ -546,7 +546,7 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void EnableSeatedMode()
     {
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
             .SeatedMode();
         seatedModeOn = true;
     }
@@ -557,7 +557,7 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void DisableSeatedMode()
     {
-        GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
+        GameObject.Find(avatarGameObjectName).GetComponent<ExtendedZigSkeleton>()
             .DisableSeatedMode();
         seatedModeOn = false;
     }
