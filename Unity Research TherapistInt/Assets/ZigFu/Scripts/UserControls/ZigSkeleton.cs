@@ -158,7 +158,7 @@ public class ZigSkeleton : MonoBehaviour
         }
     }
 
-    void UpdateRoot(Vector3 skelRoot)
+    public void UpdateRoot(Vector3 skelRoot)
     {
         // +Z is backwards in OpenNI coordinates, so reverse it
         rootPosition = Vector3.Scale(new Vector3(skelRoot.x, skelRoot.y, skelRoot.z), doMirror(Scale)) + PositionBias;
@@ -192,7 +192,7 @@ public class ZigSkeleton : MonoBehaviour
     {
         return new Vector3(mirror ? -vec.x : vec.x, vec.y, vec.z);
     }
-    void UpdatePosition(ZigJointId joint, Vector3 position)
+    public void UpdatePosition(ZigJointId joint, Vector3 position)
     {
         joint = mirror ? mirrorJoint(joint) : joint;
         // make sure something is hooked up to this joint

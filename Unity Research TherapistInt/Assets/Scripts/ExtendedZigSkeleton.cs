@@ -332,7 +332,32 @@ public class ExtendedZigSkeleton : ZigSkeleton {
     }
 
     #region recording related methods
-
+	
+	/// <summary>
+	/// if the isReturningFrame bool is true, captures current frame and returns it
+	/// Overloads the parent class
+	/// </summary>
+	/// <param name='user'>
+	/// User.
+	/// </param>
+	void Zig_UpdateUser(ZigTrackedUser user)
+    {
+        UpdateRoot(user.Position);
+        if (user.SkeletonTracked)
+        {
+            foreach (ZigInputJoint joint in user.Skeleton)
+            {
+                if (joint.GoodPosition) UpdatePosition(joint.Id, joint.Position);
+                if (joint.GoodRotation) UpdateRotation(joint.Id, joint.Rotation);
+            }
+        }
+		
+		if (isReturningFrame)
+		{
+			CaptureFrameFunction(user);
+		}
+    }
+	
     /// <summary>
     /// Used to return the recorded list to the TranslationLayer
     /// </summary>
