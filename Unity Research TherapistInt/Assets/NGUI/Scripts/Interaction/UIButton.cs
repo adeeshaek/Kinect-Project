@@ -21,7 +21,9 @@ public class UIButton : UIButtonColor
 	/// <summary>
 	/// If the collider is disabled, assume the disabled color.
 	/// </summary>
-
+	/// 
+	//
+	
 	protected override void OnEnable ()
 	{
 		if (isEnabled) base.OnEnable();
@@ -79,4 +81,5 @@ public class UIButton : UIButtonColor
 			}
 		}
 	}
+	
 }

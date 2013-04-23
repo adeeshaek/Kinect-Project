@@ -7,7 +7,7 @@ using System.Collections;
 
 public class UIMenuActionReciever : MonoBehaviour {
 	
-	void OnSelectionChange(string item)
+	public void OnSelectionChange(string item)
 	{
 		
 		//NGUI sometimes fires randomly at the start of the 
