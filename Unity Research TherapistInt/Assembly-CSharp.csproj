@@ -163,6 +163,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Scripts\ExtendedUIButton.cs" />
+     <Compile Include="Assets\Scripts\ExtendedUIPlaybackButton.cs" />
      <Compile Include="Assets\Scripts\ExtendedZigSkeleton.cs" />
      <Compile Include="Assets\Scripts\UIMenuActionReciever.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\ButtonScript.cs" />
