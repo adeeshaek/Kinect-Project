@@ -19,10 +19,29 @@ public class UIMenuActionReciever : MonoBehaviour {
 		
 		//NGUI sometimes fires randomly at the start of the 
 		//level. This hack can get around that.
-		if (Time.timeSinceLevelLoad > 1)
-		{
-			Debug.Log (item + " selected!" );
-		}
+        if (Time.timeSinceLevelLoad > 1)
+        {
+            Debug.Log(item + " selected!");
+
+
+            //big swich statement to decide what action to take
+            switch (item)
+            {
+                case "AddKPButton":
+
+                    break;
+
+                case "RemoveKPButton":
+
+                    break;
+
+                default:
+                    //fill in later
+                    break;
+
+            }
+
+        }
 
 	}
 	
