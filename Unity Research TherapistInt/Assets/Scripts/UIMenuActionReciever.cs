@@ -6,7 +6,12 @@ using System.Collections;
 /// </summary>
 
 public class UIMenuActionReciever : MonoBehaviour {
-	
+
+    /// <summary>
+    /// reference to key points panel
+    /// </summary>
+    public GameObject keyPointsPanel;
+
 	/// <summary>
 	/// Callback which is called every time a button in the UI
 	/// is selected	
@@ -28,7 +33,8 @@ public class UIMenuActionReciever : MonoBehaviour {
             switch (item)
             {
                 case "AddKPButton":
-
+                    //adding frame 0 for now
+                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint(0);
                     break;
 
                 case "RemoveKPButton":
@@ -55,5 +61,10 @@ public class UIMenuActionReciever : MonoBehaviour {
 	{
 		Debug.Log ("Slider changed to " + value);
 	}
-	
+
+    public void Start()
+    {
+
+    }
+
 }
