@@ -9,11 +9,6 @@ public class UIListPanel : MonoBehaviour
 {
 
     #region global variables
-    /// <summary>
-    /// list of items in the panel
-    /// each string corresponds to item title
-    /// </summary>
-    List<string> itemsList;
 
     /// <summary>
     /// List of panel buttons in the list
@@ -82,11 +77,11 @@ public class UIListPanel : MonoBehaviour
     public void Start()
     {
         //init variables
-        itemsList = new List<string>();
         panelButtonList = new List<GameObject>();
 
     }
 
+    
     /// <summary>
     /// Adds a new key point
     /// </summary>
@@ -103,6 +98,9 @@ public class UIListPanel : MonoBehaviour
             Instantiate(panelButtonPrefab, initPostition, Quaternion.identity) as GameObject;
         newPanelButton.transform.parent = gameObject.transform;
         newPanelButton.transform.localScale = new Vector3(1, 1, 1);
+        newPanelButton.GetComponent<UIPanelItemButton>().frameIndex = frameRef;
+
+        newPanelButton.GetComponentInChildren<UILabel>().text = "Key Pose " + numberOfButtonsInclusive + ", frame " + frameRef;
 
         panelButtonList.Add(newPanelButton);
 
@@ -113,9 +111,30 @@ public class UIListPanel : MonoBehaviour
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
-    public void RemoveKeyPoint(int keyPointToRemove)
+    public void RemoveKeyPoint(int frameRefToRemove)
     {
+        int targetItem = 0;
+        GameObject targetButton = null;
+        bool found = false;
 
+        //go through the buttonslist and find the first
+        //button with frameref we are looking for
+        for (int i = 0; i < panelButtonList.Count; i++)
+        {
+            if (panelButtonList[i].GetComponent<UIPanelItemButton>().frameIndex == frameRefToRemove)
+            {
+                targetItem = i;
+                targetButton = panelButtonList[i];
+                found = true;
+            }
+        }
+
+        //remove it
+        if (found)
+        {
+            panelButtonList.RemoveAt(targetItem);
+            Destroy(targetButton);
+        }
     }
 
     /// <summary>

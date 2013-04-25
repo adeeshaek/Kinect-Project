@@ -38,7 +38,7 @@ public class UIMenuActionReciever : MonoBehaviour {
                     break;
 
                 case "RemoveKPButton":
-
+                    keyPointsPanel.GetComponent<UIListPanel>().RemoveKeyPoint(0);
                     break;
 
                 default:

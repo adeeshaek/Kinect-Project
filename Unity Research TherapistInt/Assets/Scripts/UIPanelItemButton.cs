@@ -13,7 +13,7 @@ public class UIPanelItemButton: UIButton {
     /// <summary>
     /// index of the frame that this panel button represents
     /// </summary>
-    int frameIndex;
+    public int frameIndex;
 
 	public void OnClick()
 	{
