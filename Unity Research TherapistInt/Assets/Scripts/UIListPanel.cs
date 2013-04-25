@@ -40,7 +40,12 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// Max number of buttons used
     /// </summary>
-    public float maxbuttons = 5;
+    public int maxbuttons = 5;
+
+    /// <summary>
+    /// Updated every time slider value changes
+    /// </summary>
+    public float currentSliderValue = 0;
 
     /// <summary>
     /// keeps track of the currently selected key point
@@ -59,6 +64,7 @@ public class UIListPanel : MonoBehaviour
     public void OnSliderChange(float value)
     {
         ReDrawPanel();
+        currentSliderValue = (1-value);
         Debug.Log("Panel Slider changed to " + value);
     }
 
@@ -87,6 +93,7 @@ public class UIListPanel : MonoBehaviour
     /// </summary>
     public void AddKeyPoint(string myText)
     {
+        Debug.Log("adding Item " + myText);
         int numberOfButtonsInclusive = panelButtonList.Count + 1;
 
         Vector3 initPostition = 
@@ -145,46 +152,54 @@ public class UIListPanel : MonoBehaviour
     /// </summary>
     public void ReDrawPanel()
     {
+        //vars
         GameObject currentPanelButton;
+        int currentButton = 0;
+        int space;
 
+        //init position for a button
         Vector3 initPostition =
 new Vector3(selectItemButtonRef.transform.position.x,
 selectItemButtonRef.transform.position.y,
 0);
+        //calculate the first button space
+        //using the number of buttons in the whole space
+        //and the slider position
+        
+        if (panelButtonList.Count > maxbuttons)
+            space = panelButtonList.Count - maxbuttons;
+        else
+            space = 0;
+
+        int minimumThresh = (int) (space * currentSliderValue);
 
         //go through the list and move each item to the right 
         //place
 
         for (int i = 0; i < panelButtonList.Count; i++)
         {
-
             currentPanelButton = panelButtonList[i];
 
-            if (i < maxbuttons)
+            //change position of buttn
+            currentPanelButton.transform.position =
+                new Vector3(initPostition.x,
+            initPostition.y - ((i + 1) * buttonHeight) + (minimumThresh * buttonHeight),
+            0);
+
+            if (currentButton < maxbuttons)
             {
-                /*
-                currentPanelButton.active = true;
-                currentPanelButton.GetComponent<MeshRenderer>().enabled = true;
-                */
+                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
 
-                currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
-
-                currentPanelButton.transform.position =
-                    new Vector3(initPostition.x,
-                initPostition.y - ((i + 1) * buttonHeight),
-                0);
             }
 
             //make button disappear if too many buttons displayed
             else
             {
-                /*
-                currentPanelButton.active = false;
-                currentPanelButton.GetComponent<MeshRenderer>().enabled = false;
-                */
-                currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
+                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
 
             }
+
+            currentButton++;
         }
     }
 

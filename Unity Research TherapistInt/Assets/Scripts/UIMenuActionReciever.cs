@@ -12,6 +12,9 @@ public class UIMenuActionReciever : MonoBehaviour {
     /// </summary>
     public GameObject keyPointsPanel;
 
+    //temp
+    int currentIndex = 0;
+
 	/// <summary>
 	/// Callback which is called every time a button in the UI
 	/// is selected	
@@ -28,13 +31,13 @@ public class UIMenuActionReciever : MonoBehaviour {
         {
             Debug.Log(item + " selected!");
 
-
             //big swich statement to decide what action to take
             switch (item)
             {
                 case "AddKPButton":
                     //adding frame 0 for now
-                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint("Test");
+                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint(currentIndex.ToString());
+                    currentIndex++;
                     break;
 
                 case "RemoveKPButton":
