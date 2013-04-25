@@ -9,3 +9,13 @@ C:\Users\adeeshaek\Documents\Unity Research TherapistInt\Temp\bin\Debug\nunit.fr
 C:\Users\adeeshaek\Documents\Unity Research TherapistInt\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\adeeshaek\Documents\Unity Research TherapistInt\obj\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\adeeshaek\Documents\Unity Research TherapistInt\obj\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\OpenNI.Net.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\UnityEditor.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\UnityEngine.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\ZDK.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\Temp\bin\Debug\nunit.framework.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\obj\Debug\Assembly-CSharp-firstpass-vs.csprojResolveAssemblyReference.cache
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\aekanay1\Documents\github\Kinect-Project\Unity Research TherapistInt\obj\Debug\Assembly-CSharp-firstpass.pdb
