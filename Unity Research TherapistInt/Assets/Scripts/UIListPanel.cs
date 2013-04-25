@@ -67,9 +67,9 @@ public class UIListPanel : MonoBehaviour
         Debug.Log(item + " clicked!");
     }
 
-    public void OnPanelButtonClick(int frameIndex)
+    public void OnPanelButtonClick(int index)
     {
-        Debug.Log("Element " + frameIndex + " clicked!");
+        Debug.Log("Element " + index + " clicked!");
     }
 
     #endregion
@@ -85,7 +85,7 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// Adds a new key point
     /// </summary>
-    public void AddKeyPoint(int frameRef)
+    public void AddKeyPoint(string myText)
     {
         int numberOfButtonsInclusive = panelButtonList.Count + 1;
 
@@ -98,9 +98,8 @@ public class UIListPanel : MonoBehaviour
             Instantiate(panelButtonPrefab, initPostition, Quaternion.identity) as GameObject;
         newPanelButton.transform.parent = gameObject.transform;
         newPanelButton.transform.localScale = new Vector3(1, 1, 1);
-        newPanelButton.GetComponent<UIPanelItemButton>().frameIndex = frameRef;
-
-        newPanelButton.GetComponentInChildren<UILabel>().text = "Key Pose " + numberOfButtonsInclusive + ", frame " + frameRef;
+        newPanelButton.GetComponentInChildren<UILabel>().text = myText;
+        newPanelButton.GetComponent<UIPanelItemButton>().index = numberOfButtonsInclusive - 1;
 
         panelButtonList.Add(newPanelButton);
 
@@ -111,7 +110,7 @@ public class UIListPanel : MonoBehaviour
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
-    public void RemoveKeyPoint(int frameRefToRemove)
+    public void RemoveKeyPoint(string text)
     {
         int targetItem = 0;
         GameObject targetButton = null;
@@ -121,7 +120,7 @@ public class UIListPanel : MonoBehaviour
         //button with frameref we are looking for
         for (int i = 0; i < panelButtonList.Count; i++)
         {
-            if (panelButtonList[i].GetComponent<UIPanelItemButton>().frameIndex == frameRefToRemove)
+            if (panelButtonList[i].GetComponentInChildren<UILabel>().text == text)
             {
                 targetItem = i;
                 targetButton = panelButtonList[i];

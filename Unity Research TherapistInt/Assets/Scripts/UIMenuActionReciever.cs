@@ -34,11 +34,11 @@ public class UIMenuActionReciever : MonoBehaviour {
             {
                 case "AddKPButton":
                     //adding frame 0 for now
-                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint(0);
+                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint("Test");
                     break;
 
                 case "RemoveKPButton":
-                    keyPointsPanel.GetComponent<UIListPanel>().RemoveKeyPoint(0);
+                    keyPointsPanel.GetComponent<UIListPanel>().RemoveKeyPoint("Test");
                     break;
 
                 default:
