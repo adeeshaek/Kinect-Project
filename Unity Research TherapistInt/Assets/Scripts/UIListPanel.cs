@@ -36,6 +36,18 @@ public class UIListPanel : MonoBehaviour
     public GameObject selectItemButtonRef;
 
     /// <summary>
+    /// Defines the threshold window in which the panel
+    /// buttons display (in terms of y-axis). threshold
+    /// is relative to the 
+    /// </summary>
+    public float buttonHeight = 0.2f;
+
+    /// <summary>
+    /// Max number of buttons used
+    /// </summary>
+    public float maxbuttons = 5;
+
+    /// <summary>
     /// keeps track of the currently selected key point
     /// set to an unreasonably high number to begin with
     /// which allows us to check if it has been modified
@@ -80,15 +92,19 @@ public class UIListPanel : MonoBehaviour
     /// </summary>
     public void AddKeyPoint(int frameRef)
     {
+        int numberOfButtonsInclusive = panelButtonList.Count + 1;
+
         Vector3 initPostition = 
             new Vector3(selectItemButtonRef.transform.position.x, 
-                sliderRef.transform.position.y,
+                selectItemButtonRef.transform.position.y - (numberOfButtonsInclusive * buttonHeight),
                 0);
 
         GameObject newPanelButton =
             Instantiate(panelButtonPrefab, initPostition, Quaternion.identity) as GameObject;
         newPanelButton.transform.parent = gameObject.transform;
-        newPanelButton.transform.localScale = new Vector3(1, 1, 1); 
+        newPanelButton.transform.localScale = new Vector3(1, 1, 1);
+
+        panelButtonList.Add(newPanelButton);
 
         DrawPanel();
     }
