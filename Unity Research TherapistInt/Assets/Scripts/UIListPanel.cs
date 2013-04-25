@@ -58,7 +58,7 @@ public class UIListPanel : MonoBehaviour
     /// <param name="value"></param>
     public void OnSliderChange(float value)
     {
-        DrawPanel();
+        ReDrawPanel();
         Debug.Log("Panel Slider changed to " + value);
     }
 
@@ -103,7 +103,7 @@ public class UIListPanel : MonoBehaviour
 
         panelButtonList.Add(newPanelButton);
 
-        DrawPanel();
+        ReDrawPanel();
     }
 
     /// <summary>
@@ -134,6 +134,8 @@ public class UIListPanel : MonoBehaviour
             panelButtonList.RemoveAt(targetItem);
             Destroy(targetButton);
         }
+
+        ReDrawPanel();
     }
 
     /// <summary>
@@ -141,9 +143,49 @@ public class UIListPanel : MonoBehaviour
     /// or not they are within the bounds of the panel
     /// called every time a change takes place
     /// </summary>
-    public void DrawPanel()
+    public void ReDrawPanel()
     {
+        GameObject currentPanelButton;
 
+        Vector3 initPostition =
+new Vector3(selectItemButtonRef.transform.position.x,
+selectItemButtonRef.transform.position.y,
+0);
+
+        //go through the list and move each item to the right 
+        //place
+
+        for (int i = 0; i < panelButtonList.Count; i++)
+        {
+
+            currentPanelButton = panelButtonList[i];
+
+            if (i < maxbuttons)
+            {
+                /*
+                currentPanelButton.active = true;
+                currentPanelButton.GetComponent<MeshRenderer>().enabled = true;
+                */
+
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
+
+                currentPanelButton.transform.position =
+                    new Vector3(initPostition.x,
+                initPostition.y - ((i + 1) * buttonHeight),
+                0);
+            }
+
+            //make button disappear if too many buttons displayed
+            else
+            {
+                /*
+                currentPanelButton.active = false;
+                currentPanelButton.GetComponent<MeshRenderer>().enabled = false;
+                */
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
+
+            }
+        }
     }
 
 }
