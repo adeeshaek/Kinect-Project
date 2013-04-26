@@ -12,7 +12,15 @@ public class UIMenuActionReciever : MonoBehaviour {
     /// </summary>
     public GameObject keyPointsPanel;
 
+    /// <summary>
+    /// reference to status label
+    /// </summary>
     public GameObject StatusLabel;
+
+    /// <summary>
+    /// reference to load panel
+    /// </summary>
+    public GameObject LoadSaveGroup;
 
     int currentIndex = 0;
 
@@ -57,6 +65,11 @@ public class UIMenuActionReciever : MonoBehaviour {
 
                 case "StopButton":
                     setStatus("Paused");
+                    break;
+
+                case "Open":
+                    setStatus("Opening File");
+                    LoadSaveGroup.SetActiveRecursively(true);
                     break;
 
                 default:

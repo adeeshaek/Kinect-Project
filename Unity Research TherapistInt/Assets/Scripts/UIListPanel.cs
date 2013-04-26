@@ -78,7 +78,7 @@ public class UIListPanel : MonoBehaviour
         Debug.Log("Panel Slider changed to " + value);
     }
 
-    public void OnSelectionChange(string item)
+    public virtual void OnSelectionChange(string item)
     {
         Debug.Log(item + " clicked!");
 
@@ -138,34 +138,6 @@ public class UIListPanel : MonoBehaviour
     /// <param name="keyPointToRemove"></param>
     public bool RemoveItem()
     {
-        /*
-        int targetItem = 0;
-        GameObject targetButton = null;
-        bool found = false;
-
-        //go through the buttonslist and find the first
-        //button with frameref we are looking for
-        for (int i = 0; i < panelButtonList.Count; i++)
-        {
-            if (panelButtonList[i].GetComponentInChildren<UILabel>().text == text)
-            {
-                targetItem = i;
-                targetButton = panelButtonList[i];
-                found = true;
-            }
-        }
-
-        //remove it
-        if (found)
-        {
-            panelButtonList.RemoveAt(targetItem);
-            Destroy(targetButton);
-        }
-
-        ReDrawPanel();
-
-        return found;
-         */
         Destroy(panelButtonList[selectedItem]);
         panelButtonList.RemoveAt(selectedItem);
         resequence();
