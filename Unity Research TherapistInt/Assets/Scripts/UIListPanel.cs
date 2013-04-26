@@ -81,11 +81,20 @@ public class UIListPanel : MonoBehaviour
     public void OnSelectionChange(string item)
     {
         Debug.Log(item + " clicked!");
+
     }
 
     public void OnPanelButtonClick(int index)
     {
         Debug.Log("Element " + index + " clicked!");
+
+        string itemText =
+            panelButtonList[index].GetComponentInChildren<UILabel>().text;
+
+        selectItemButtonRef.GetComponentInChildren<UILabel>().text
+    = (itemText + " selected");
+
+        selectedItem = index;
     }
 
     #endregion
@@ -101,7 +110,7 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// Adds a new key point
     /// </summary>
-    public void AddKeyPoint(string myText)
+    public void AddItem(string myText)
     {
         Debug.Log("adding Item " + myText);
         int numberOfButtonsInclusive = panelButtonList.Count + 1;
@@ -127,8 +136,9 @@ public class UIListPanel : MonoBehaviour
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
-    public void RemoveKeyPoint(string text)
+    public bool RemoveItem()
     {
+        /*
         int targetItem = 0;
         GameObject targetButton = null;
         bool found = false;
@@ -153,6 +163,14 @@ public class UIListPanel : MonoBehaviour
         }
 
         ReDrawPanel();
+
+        return found;
+         */
+        Destroy(panelButtonList[selectedItem]);
+        panelButtonList.RemoveAt(selectedItem);
+        resequence();
+        ReDrawPanel();
+        return true;
     }
 
     /// <summary>
@@ -209,6 +227,27 @@ selectItemButtonRef.transform.position.y,
             }
 
         }
+
+    }
+
+    /// <summary>
+    /// resequences the panel list by copying all the items
+    /// into a new list, then destroying and redrawing the list
+    /// </summary>
+    protected void resequence()
+    {
+        List<GameObject> newList = new List<GameObject>();
+
+        foreach (GameObject item in panelButtonList)
+        {
+            if (item)
+                newList.Add(item);
+            else
+                Debug.Log("Null?");
+        }
+
+        panelButtonList = newList;
+
     }
 
 }

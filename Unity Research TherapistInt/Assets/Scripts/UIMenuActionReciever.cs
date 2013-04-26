@@ -12,7 +12,8 @@ public class UIMenuActionReciever : MonoBehaviour {
     /// </summary>
     public GameObject keyPointsPanel;
 
-    //temp
+    public GameObject StatusLabel;
+
     int currentIndex = 0;
 
 	/// <summary>
@@ -36,12 +37,26 @@ public class UIMenuActionReciever : MonoBehaviour {
             {
                 case "AddKPButton":
                     //adding frame 0 for now
-                    keyPointsPanel.GetComponent<UIListPanel>().AddKeyPoint(currentIndex.ToString());
+                    keyPointsPanel.GetComponent<UIListPanel>().AddItem(currentIndex.ToString());
+                    setStatus("Key Point " + currentIndex + " added");
                     currentIndex++;
                     break;
 
                 case "RemoveKPButton":
-                    keyPointsPanel.GetComponent<UIListPanel>().RemoveKeyPoint("Test");
+                    bool success = keyPointsPanel.GetComponent<UIListPanel>().RemoveItem();
+                    if (success)
+                        setStatus("Key Point " + " removed");
+                    else
+                        setStatus("Key Point not removed");
+
+                    break;
+
+                case "PlayButton":
+                    setStatus("Playing");
+                    break;
+
+                case "StopButton":
+                    setStatus("Paused");
                     break;
 
                 default:
@@ -53,7 +68,12 @@ public class UIMenuActionReciever : MonoBehaviour {
         }
 
 	}
-	
+
+    public void setStatus(string status)
+    {
+        StatusLabel.GetComponent<UILabel>().text = status;
+    }
+
 	/// <summary>
 	/// Callback called every time slider value is changed
 	/// </summary>

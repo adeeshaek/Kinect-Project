@@ -15,6 +15,8 @@ public class UIPanelItemButton: UIButton {
     /// </summary>
     public int index;
 
+    public int frameIndex;
+
 	public void OnClick()
 	{
         gameObject.transform.parent.GetComponent<UIListPanel>().OnPanelButtonClick(index);
