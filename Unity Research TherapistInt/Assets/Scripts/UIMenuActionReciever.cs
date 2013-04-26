@@ -8,6 +8,12 @@ using System.Collections;
 public class UIMenuActionReciever : MonoBehaviour {
 
     /// <summary>
+    /// Currently selected file. Set by UILoadPanel
+    /// or UISavePanel
+    /// </summary>
+    public string currentlySelectedFile;
+
+    /// <summary>
     /// reference to key points panel
     /// </summary>
     public GameObject keyPointsPanel;
@@ -38,7 +44,6 @@ public class UIMenuActionReciever : MonoBehaviour {
 		//level. This hack can get around that.
         if (Time.timeSinceLevelLoad > 1)
         {
-            Debug.Log(item + " selected!");
 
             //big swich statement to decide what action to take
             switch (item)

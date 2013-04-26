@@ -13,7 +13,7 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// List of panel buttons in the list
     /// </summary>
-    List<GameObject> panelButtonList;
+    protected List<GameObject> panelButtonList;
 
     /// <summary>
     /// Ref to the prefab for the panel button 
@@ -62,7 +62,7 @@ public class UIListPanel : MonoBehaviour
     /// set to an unreasonably high number to begin with
     /// which allows us to check if it has been modified
     /// </summary>
-    int selectedItem = 9999;
+    protected int selectedItem = 9999;
 
     #endregion
 
@@ -84,9 +84,8 @@ public class UIListPanel : MonoBehaviour
 
     }
 
-    public void OnPanelButtonClick(int index)
+    public virtual void OnPanelButtonClick(int index)
     {
-        Debug.Log("Element " + index + " clicked!");
 
         string itemText =
             panelButtonList[index].GetComponentInChildren<UILabel>().text;
