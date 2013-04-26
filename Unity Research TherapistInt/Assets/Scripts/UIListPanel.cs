@@ -48,6 +48,16 @@ public class UIListPanel : MonoBehaviour
     public float currentSliderValue = 0;
 
     /// <summary>
+    /// Max threshold for button - set in inspector
+    /// </summary>
+    public float maxThresh = 0.23f;
+
+    /// <summary>
+    /// Min threshold for button - set in inspector
+    /// </summary>
+    public float minThresh = -0.4f;
+
+    /// <summary>
     /// keeps track of the currently selected key point
     /// set to an unreasonably high number to begin with
     /// which allows us to check if it has been modified
@@ -154,7 +164,6 @@ public class UIListPanel : MonoBehaviour
     {
         //vars
         GameObject currentPanelButton;
-        int currentButton = 0;
         int space;
 
         //init position for a button
@@ -171,7 +180,7 @@ selectItemButtonRef.transform.position.y,
         else
             space = 0;
 
-        int minimumThresh = (int) (space * currentSliderValue);
+        float minimumThresh = (space * currentSliderValue);
 
         //go through the list and move each item to the right 
         //place
@@ -186,20 +195,19 @@ selectItemButtonRef.transform.position.y,
             initPostition.y - ((i + 1) * buttonHeight) + (minimumThresh * buttonHeight),
             0);
 
-            if (currentButton < maxbuttons)
+            if (currentPanelButton.transform.position.y < maxThresh
+                && currentPanelButton.transform.position.y > minThresh)
             {
-                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
 
             }
 
             //make button disappear if too many buttons displayed
             else
             {
-                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
-
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
             }
 
-            currentButton++;
         }
     }
 
