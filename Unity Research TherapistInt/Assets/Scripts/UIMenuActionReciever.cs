@@ -10,6 +10,7 @@ public class UIMenuActionReciever : MonoBehaviour
 
     #region global variables
 
+    #region gui_related global variables
     /// <summary>
     /// enum which checks if play button is playing or is paused
     /// </summary>
@@ -76,6 +77,17 @@ public class UIMenuActionReciever : MonoBehaviour
     /// selected index
     /// </summary>
     int currentIndex = 0;
+
+    #endregion
+
+    #region tracking related global vars
+
+    /// <summary>
+    /// reference to translation layer object
+    /// </summary>
+    public GameObject translationLayerObject;
+
+    #endregion
 
     #endregion
 
@@ -164,6 +176,16 @@ public class UIMenuActionReciever : MonoBehaviour
         }
 
 	}
+
+    /// <summary>
+    /// triggered when a kp is selected in the kp list  
+    /// </summary>
+    /// <param name="keyPointIndex">Index of the KP selected</param>
+    public void KeyPointsListClicked(int keyPointIndex)
+    {
+        setStatus("Jumping to Key Point " + keyPointIndex);
+        translationLayerObject.GetComponent<TranslationLayer>().JumpToKeyPoint(keyPointIndex);
+    }
 
     #endregion
 
