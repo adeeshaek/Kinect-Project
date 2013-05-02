@@ -19,6 +19,11 @@ public class UIExportPanel : UIListPanel
     public GameObject NGUIReciever;
 
     /// <summary>
+    /// name of the selected item
+    /// </summary>
+    public string selectedItemName;
+
+    /// <summary>
     /// initializes everything
     /// </summary>
     public void Start()
@@ -70,11 +75,17 @@ public class UIExportPanel : UIListPanel
     /// </summary>
     public void ExportFile()
     {
-        selectedItemPath = Directory.GetCurrentDirectory() + "\\" + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        selectedItemName = selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+
+        selectedItemPath = Directory.GetCurrentDirectory() 
+            + "\\" + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        /*
         Debug.Log(selectedItemPath);
         NGUIReciever.GetComponent<UIMenuActionReciever>().currentlySelectedFile = selectedItemPath;
         NGUIReciever.GetComponent<UIMenuActionReciever>()
             .setStatus("Exported to File " + selectItemButtonRef.GetComponentInChildren<UILabel>().text);
+         */
+        NGUIReciever.GetComponent<UIMenuActionReciever>().exportedFile(selectedItemPath, selectedItemName);
         MakeInvisible();
     }
 

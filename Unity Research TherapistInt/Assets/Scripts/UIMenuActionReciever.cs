@@ -83,15 +83,15 @@ public class UIMenuActionReciever : MonoBehaviour {
                     break;
 
                 case "Open":
-                    openFile(currentlySelectedFile);
+                    openFile();
                     break;
 
                 case "Save":
-                    saveFile(currentlySelectedFile);
+                    saveFile();
                     break;
 
                 case "Export":
-                    exportFile(currentlySelectedFile);
+                    exportFile();
                     break;
 
                 default:
@@ -104,46 +104,55 @@ public class UIMenuActionReciever : MonoBehaviour {
 
 	}
 
-    public void savedFile(string fileName)
+    /// <summary>
+    /// triggered when save dialog selects a file to save to 
+    /// </summary>
+    /// <param name="fileName">file to save to</param>
+    public void savedFile(string filePath, string fileName)
     {
-
-    }
-
-    public void exportedFile(string fileName)
-    {
-
-    }
-
-    public void openedFile(string fileName)
-    {
-
+        setStatus("Saved file to " + fileName);
     }
 
     /// <summary>
-    /// opens the file of the given fileName
+    /// triggered when export dialog selects a file
     /// </summary>
-    /// <param name="fileName"></param>
-    public void openFile(string fileName)
+    /// <param name="fileName">name of file to export to</param>
+    public void exportedFile(string filePath, string fileName)
+    {
+        setStatus("Exported file to " + fileName);
+    }
+
+    /// <summary>
+    /// triggered when file open dialog selects a file
+    /// </summary>
+    /// <param name="fileName">name of file to open</param>
+    public void openedFile(string filePath, string fileName)
+    {
+        setStatus("Opened file " + fileName);
+    }
+
+    /// <summary>
+    /// opens the file open dialog
+    /// </summary>
+    public void openFile()
     {
         setStatus("Opening File");
         LoadGroup.SetActiveRecursively(true);
     }
 
     /// <summary>
-    /// saves the file to the given filename
+    /// saves the file save dialog
     /// </summary>
-    /// <param name="fileName"></param>
-    public void saveFile(string fileName)
+    public void saveFile()
     {
         setStatus("Saving to File");
         SaveGroup.SetActiveRecursively(true);
     }
 
     /// <summary>
-    /// exports the file to given filename
+    /// exports the file export dialog
     /// </summary>
-    /// <param name="fileName"></param>
-    public void exportFile(string fileName)
+    public void exportFile()
     {
         setStatus("Exporting to File");
         ExportGroup.SetActiveRecursively(true);
