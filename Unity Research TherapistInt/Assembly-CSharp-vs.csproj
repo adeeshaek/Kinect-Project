@@ -165,11 +165,13 @@
      <Compile Include="Assets\Scripts\ExtendedUIButton.cs" />
      <Compile Include="Assets\Scripts\ExtendedUIPlaybackButton.cs" />
      <Compile Include="Assets\Scripts\ExtendedZigSkeleton.cs" />
+     <Compile Include="Assets\Scripts\UIExportPanel.cs" />
      <Compile Include="Assets\Scripts\UIListPanel.cs" />
      <Compile Include="Assets\Scripts\UILoadPanel.cs" />
      <Compile Include="Assets\Scripts\UIMenuActionReciever.cs" />
      <Compile Include="Assets\Scripts\UIPanelButton.cs" />
      <Compile Include="Assets\Scripts\UIPanelItemButton.cs" />
+     <Compile Include="Assets\Scripts\UISavePanel.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\ButtonScript.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\SerializeScript.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\TranslationLayer.cs" />

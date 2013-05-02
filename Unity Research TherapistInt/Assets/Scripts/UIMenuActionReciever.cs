@@ -26,7 +26,17 @@ public class UIMenuActionReciever : MonoBehaviour {
     /// <summary>
     /// reference to load panel
     /// </summary>
-    public GameObject LoadSaveGroup;
+    public GameObject LoadGroup;
+
+    /// <summary>
+    /// reference to save panel
+    /// </summary>
+    public GameObject SaveGroup;
+
+    /// <summary>
+    /// reference to export panel
+    /// </summary>
+    public GameObject ExportGroup;
 
     int currentIndex = 0;
 
@@ -73,8 +83,15 @@ public class UIMenuActionReciever : MonoBehaviour {
                     break;
 
                 case "Open":
-                    setStatus("Opening File");
-                    LoadSaveGroup.SetActiveRecursively(true);
+                    openFile(currentlySelectedFile);
+                    break;
+
+                case "Save":
+                    saveFile(currentlySelectedFile);
+                    break;
+
+                case "Export":
+                    exportFile(currentlySelectedFile);
                     break;
 
                 default:
@@ -86,6 +103,51 @@ public class UIMenuActionReciever : MonoBehaviour {
         }
 
 	}
+
+    public void savedFile(string fileName)
+    {
+
+    }
+
+    public void exportedFile(string fileName)
+    {
+
+    }
+
+    public void openedFile(string fileName)
+    {
+
+    }
+
+    /// <summary>
+    /// opens the file of the given fileName
+    /// </summary>
+    /// <param name="fileName"></param>
+    public void openFile(string fileName)
+    {
+        setStatus("Opening File");
+        LoadGroup.SetActiveRecursively(true);
+    }
+
+    /// <summary>
+    /// saves the file to the given filename
+    /// </summary>
+    /// <param name="fileName"></param>
+    public void saveFile(string fileName)
+    {
+        setStatus("Saving to File");
+        SaveGroup.SetActiveRecursively(true);
+    }
+
+    /// <summary>
+    /// exports the file to given filename
+    /// </summary>
+    /// <param name="fileName"></param>
+    public void exportFile(string fileName)
+    {
+        setStatus("Exporting to File");
+        ExportGroup.SetActiveRecursively(true);
+    }
 
     public void setStatus(string status)
     {
