@@ -42,6 +42,11 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public static string GUIGameObjectName = "GUI";
 
+    /// <summary>
+    /// Reference to NGUI reciever
+    /// </summary>
+    public GameObject NGUIReciever;
+
 
     #region Lists and playback related variables
 
@@ -629,6 +634,7 @@ public class TranslationLayer : MonoBehaviour {
            // .GUIOutputText2;
 
        // feedbackText2.text = textIn;
+        
 
     }
     #endregion
@@ -640,7 +646,8 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void UpdateGUIKPList()
     {
-        GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateKPList();
+        //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateKPList();
+        NGUIReciever.GetComponent<UIMenuActionReciever>().updateKeyPointsList(playbackList);
     }
 
     #endregion

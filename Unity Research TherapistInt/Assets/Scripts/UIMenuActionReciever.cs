@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Recieves actions created by NGUI
@@ -291,6 +292,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Playback Stopped");
         playButtonStatus = ButtonState.Playing;
         setPlayPauseButtonStatus(ButtonState.Paused);
+        translationLayerObject.GetComponent<TranslationLayer>().StopPlaying();
     }
 
     /// <summary>
@@ -301,6 +303,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Playback Paused");
         playButtonStatus = ButtonState.Paused;
         setPlayPauseButtonStatus(ButtonState.Paused);
+        translationLayerObject.GetComponent<TranslationLayer>().PausePlaying();
     }
 
     /// <summary>
@@ -311,6 +314,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Playing Recorded Movements");
         playButtonStatus = ButtonState.Playing;
         setPlayPauseButtonStatus(ButtonState.Playing);
+        translationLayerObject.GetComponent<TranslationLayer>().StartPlaying();
     }
 
     /// <summary>
@@ -321,6 +325,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Recording");
         recordButtonStatus = ButtonState.Recording;
         setRecordButtonStatus(ButtonState.Recording);
+        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
     }
 
     /// <summary>
@@ -331,41 +336,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Stopping Record");
         recordButtonStatus = ButtonState.Not_Recording;
         setRecordButtonStatus(ButtonState.Not_Recording);
-    }
-
-    /// <summary>
-    /// triggered when "new file" button pressed
-    /// </summary>
-    public void newButtonPressed()
-    {
-        setStatus("Created New File");
-    }
-
-    /// <summary>
-    /// triggered when save dialog selects a file to save to 
-    /// </summary>
-    /// <param name="fileName">file to save to</param>
-    public void savedFile(string filePath, string fileName)
-    {
-        setStatus("Saved file to " + fileName);
-    }
-
-    /// <summary>
-    /// triggered when export dialog selects a file
-    /// </summary>
-    /// <param name="fileName">name of file to export to</param>
-    public void exportedFile(string filePath, string fileName)
-    {
-        setStatus("Exported file to " + fileName);
-    }
-
-    /// <summary>
-    /// triggered when file open dialog selects a file
-    /// </summary>
-    /// <param name="fileName">name of file to open</param>
-    public void openedFile(string filePath, string fileName)
-    {
-        setStatus("Opened file " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
     }
 
     /// <summary>
@@ -400,15 +371,77 @@ public class UIMenuActionReciever : MonoBehaviour
         StatusLabel.GetComponent<UILabel>().text = status;
     }
 
-	/// <summary>
-	/// Callback called every time slider value is changed
-	/// </summary>
-	/// <param name='value'>
-	/// float value of the slider (between 0 and 1)
-	/// </param>
-	public void OnSliderChange(float value)
+    /// <summary>
+    /// triggered when "new file" button pressed
+    /// </summary>
+    public void newButtonPressed()
+    {
+        setStatus("Created New File");
+    }
+
+    #region IO related callbacks
+
+    /// <summary>
+    /// triggered when save dialog selects a file to save to 
+    /// </summary>
+    /// <param name="fileName">file to save to</param>
+    public void savedFile(string filePath, string fileName)
+    {
+        setStatus("Saved file to " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().SaveList(filePath);
+    }
+
+    /// <summary>
+    /// triggered when export dialog selects a file
+    /// </summary>
+    /// <param name="fileName">name of file to export to</param>
+    public void exportedFile(string filePath, string fileName)
+    {
+        setStatus("Exported file to " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().ExportList(filePath);
+    }
+
+    /// <summary>
+    /// triggered when file open dialog selects a file
+    /// </summary>
+    /// <param name="fileName">name of file to open</param>
+    public void openedFile(string filePath, string fileName)
+    {
+        setStatus("Opened file " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().LoadList(filePath);
+    }
+
+    /// <summary>
+    /// updates the key points list with the given playback list. 
+    /// called from translationlayer
+    /// </summary>
+    /// <param name="playbackList"></param>
+    public void updateKeyPointsList(List<SerializeScript.SnapshotClass> playbackList)
+    {
+        //clear the list
+        keyPointsPanel.GetComponent<KeyPointsListPanel>().ClearList();
+
+        Debug.Log("Playlist size: " + playbackList.Count);
+
+        //add each of the kps to the list
+        for (int i = 0; i < playbackList.Count; i++)
+        {
+            keyPointsPanel.GetComponent<KeyPointsListPanel>().AddItem("Key Point " + i);
+        }
+
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Callback called every time slider value is changed
+    /// </summary>
+    /// <param name='value'>
+    /// float value of the slider (between 0 and 1)
+    /// </param>
+    public void OnSliderChange(float value)
 	{
-		Debug.Log ("Slider changed to " + value);
+
 	}
 
     public void Start()
