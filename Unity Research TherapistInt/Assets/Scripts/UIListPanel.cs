@@ -13,7 +13,7 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// List of panel buttons in the list
     /// </summary>
-    List<GameObject> panelButtonList;
+    protected List<GameObject> panelButtonList;
 
     /// <summary>
     /// Ref to the prefab for the panel button 
@@ -48,11 +48,21 @@ public class UIListPanel : MonoBehaviour
     public float currentSliderValue = 0;
 
     /// <summary>
+    /// Max threshold for button - set in inspector
+    /// </summary>
+    public float maxThresh = 0.23f;
+
+    /// <summary>
+    /// Min threshold for button - set in inspector
+    /// </summary>
+    public float minThresh = -0.4f;
+
+    /// <summary>
     /// keeps track of the currently selected key point
     /// set to an unreasonably high number to begin with
     /// which allows us to check if it has been modified
     /// </summary>
-    int selectedItem = 9999;
+    protected int selectedItem = 9999;
 
     #endregion
 
@@ -68,14 +78,22 @@ public class UIListPanel : MonoBehaviour
         Debug.Log("Panel Slider changed to " + value);
     }
 
-    public void OnSelectionChange(string item)
+    public virtual void OnSelectionChange(string item)
     {
         Debug.Log(item + " clicked!");
+
     }
 
-    public void OnPanelButtonClick(int index)
+    public virtual void OnPanelButtonClick(int index)
     {
-        Debug.Log("Element " + index + " clicked!");
+
+        string itemText =
+            panelButtonList[index].GetComponentInChildren<UILabel>().text;
+
+        selectItemButtonRef.GetComponentInChildren<UILabel>().text
+    = (itemText + " selected");
+
+        selectedItem = index;
     }
 
     #endregion
@@ -91,7 +109,7 @@ public class UIListPanel : MonoBehaviour
     /// <summary>
     /// Adds a new key point
     /// </summary>
-    public void AddKeyPoint(string myText)
+    public void AddItem(string myText)
     {
         Debug.Log("adding Item " + myText);
         int numberOfButtonsInclusive = panelButtonList.Count + 1;
@@ -117,32 +135,13 @@ public class UIListPanel : MonoBehaviour
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
-    public void RemoveKeyPoint(string text)
+    public bool RemoveItem()
     {
-        int targetItem = 0;
-        GameObject targetButton = null;
-        bool found = false;
-
-        //go through the buttonslist and find the first
-        //button with frameref we are looking for
-        for (int i = 0; i < panelButtonList.Count; i++)
-        {
-            if (panelButtonList[i].GetComponentInChildren<UILabel>().text == text)
-            {
-                targetItem = i;
-                targetButton = panelButtonList[i];
-                found = true;
-            }
-        }
-
-        //remove it
-        if (found)
-        {
-            panelButtonList.RemoveAt(targetItem);
-            Destroy(targetButton);
-        }
-
+        Destroy(panelButtonList[selectedItem]);
+        panelButtonList.RemoveAt(selectedItem);
+        resequence();
         ReDrawPanel();
+        return true;
     }
 
     /// <summary>
@@ -154,7 +153,6 @@ public class UIListPanel : MonoBehaviour
     {
         //vars
         GameObject currentPanelButton;
-        int currentButton = 0;
         int space;
 
         //init position for a button
@@ -171,7 +169,7 @@ selectItemButtonRef.transform.position.y,
         else
             space = 0;
 
-        int minimumThresh = (int) (space * currentSliderValue);
+        float minimumThresh = (space * currentSliderValue);
 
         //go through the list and move each item to the right 
         //place
@@ -186,21 +184,41 @@ selectItemButtonRef.transform.position.y,
             initPostition.y - ((i + 1) * buttonHeight) + (minimumThresh * buttonHeight),
             0);
 
-            if (currentButton < maxbuttons)
+            if (currentPanelButton.transform.position.y < maxThresh
+                && currentPanelButton.transform.position.y > minThresh)
             {
-                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
 
             }
 
             //make button disappear if too many buttons displayed
             else
             {
-                //currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
-
+                currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
             }
 
-            currentButton++;
         }
+
+    }
+
+    /// <summary>
+    /// resequences the panel list by copying all the items
+    /// into a new list, then destroying and redrawing the list
+    /// </summary>
+    protected void resequence()
+    {
+        List<GameObject> newList = new List<GameObject>();
+
+        foreach (GameObject item in panelButtonList)
+        {
+            if (item)
+                newList.Add(item);
+            else
+                Debug.Log("Null?");
+        }
+
+        panelButtonList = newList;
+
     }
 
 }
