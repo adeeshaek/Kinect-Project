@@ -416,7 +416,7 @@ public class UIMenuActionReciever : MonoBehaviour
     /// called from translationlayer
     /// </summary>
     /// <param name="playbackList"></param>
-    public void updateKeyPointsList(List<SerializeScript.SnapshotClass> playbackList)
+    public void updateKeyPointsList(List<SerializeScript.KeyPoint> playbackList)
     {
         //clear the list
         keyPointsPanel.GetComponent<KeyPointsListPanel>().ClearList();

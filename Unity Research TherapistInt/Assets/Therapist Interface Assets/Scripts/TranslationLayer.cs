@@ -161,7 +161,6 @@ public class TranslationLayer : MonoBehaviour {
         Debug.Log("List " + fileNameIn + " succesfully loaded");
         StopPlaying(); //reset playback
         SyncLists(); //refresh keypointslist
-        UpdateGUIKPList();
     }
 
     /// <summary>
@@ -647,7 +646,7 @@ public class TranslationLayer : MonoBehaviour {
     public void UpdateGUIKPList()
     {
         //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateKPList();
-        NGUIReciever.GetComponent<UIMenuActionReciever>().updateKeyPointsList(playbackList);
+        NGUIReciever.GetComponent<UIMenuActionReciever>().updateKeyPointsList(keypointsList);
     }
 
     #endregion

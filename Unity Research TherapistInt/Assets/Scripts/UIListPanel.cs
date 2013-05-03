@@ -164,7 +164,7 @@ public class UIListPanel : MonoBehaviour
             RemoveItem(0);
         }
 
-        Debug.Log(panelButtonList.Count);
+        Debug.Log("Number of items after clearing: " + panelButtonList.Count);
     }
 
     /// <summary>
@@ -242,17 +242,6 @@ selectItemButtonRef.transform.position.y,
                 newList.Add(current);
             }
 
-        }
-
-        //CHANGE ITEM NAME TO ITEM NUMBER
-        ///
-
-        foreach (GameObject item in panelButtonList)
-        {
-            if (item)
-                newList.Add(item);
-            else
-                Debug.Log("Null?");
         }
 
         panelButtonList = newList;
