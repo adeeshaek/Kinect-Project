@@ -19,6 +19,11 @@ public class UISavePanel : UIListPanel
     public GameObject NGUIReciever;
 
     /// <summary>
+    /// name of the selected item
+    /// </summary>
+    public string selectedItemName;
+
+    /// <summary>
     /// initializes everything
     /// </summary>
     public void Start()
@@ -70,11 +75,20 @@ public class UISavePanel : UIListPanel
     /// </summary>
     public void SaveFile()
     {
-        selectedItemPath = Directory.GetCurrentDirectory() + "\\" + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        selectedItemName = selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+
+        selectedItemPath = Directory.GetCurrentDirectory() + "\\" 
+            + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        
+        /*
         Debug.Log(selectedItemPath);
         NGUIReciever.GetComponent<UIMenuActionReciever>().currentlySelectedFile = selectedItemPath;
         NGUIReciever.GetComponent<UIMenuActionReciever>()
             .setStatus("Saved to File " + selectItemButtonRef.GetComponentInChildren<UILabel>().text);
+       */
+
+        NGUIReciever.GetComponent<UIMenuActionReciever>().savedFile(selectedItemPath, selectedItemName);
+        
         MakeInvisible();
     }
 

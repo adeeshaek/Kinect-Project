@@ -1,11 +1,37 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Recieves actions created by NGUI
 /// </summary>
 
-public class UIMenuActionReciever : MonoBehaviour {
+public class UIMenuActionReciever : MonoBehaviour
+{
+
+    #region global variables
+
+    #region gui_related global variables
+    /// <summary>
+    /// enum which checks if play button is playing or is paused
+    /// </summary>
+    public enum ButtonState
+    {
+        Playing,
+        Paused,
+        Recording,
+        Not_Recording
+    };
+
+    /// <summary>
+    /// instance of enum which checks state of play button
+    /// </summary>
+    ButtonState playButtonStatus = ButtonState.Paused;
+
+    /// <summary>
+    /// Instance of enum which checks the state of the Record button
+    /// </summary>
+    ButtonState recordButtonStatus = ButtonState.Not_Recording;
 
     /// <summary>
     /// Currently selected file. Set by UILoadPanel
@@ -38,9 +64,37 @@ public class UIMenuActionReciever : MonoBehaviour {
     /// </summary>
     public GameObject ExportGroup;
 
+    /// <summary>
+    /// reference to play button
+    /// </summary>
+    public GameObject PlayButton;
+
+    /// <summary>
+    /// reference to record button
+    /// </summary>
+    public GameObject RecordButton;
+
+    /// <summary>
+    /// selected index
+    /// </summary>
     int currentIndex = 0;
 
-	/// <summary>
+    #endregion
+
+    #region tracking related global vars
+
+    /// <summary>
+    /// reference to translation layer object
+    /// </summary>
+    public GameObject translationLayerObject;
+
+    #endregion
+
+    #endregion
+
+    #region main callback method
+
+    /// <summary>
 	/// Callback which is called every time a button in the UI
 	/// is selected	
 	/// </summary>
@@ -83,15 +137,35 @@ public class UIMenuActionReciever : MonoBehaviour {
                     break;
 
                 case "Open":
-                    openFile(currentlySelectedFile);
+                    openFileButtonPressed();
                     break;
 
                 case "Save":
-                    saveFile(currentlySelectedFile);
+                    saveFileButtonPressed();
                     break;
 
                 case "Export":
-                    exportFile(currentlySelectedFile);
+                    exportFileButtonPressed();
+                    break;
+
+                case "New":
+                    newButtonPressed();
+                    break;
+
+                case "Play":
+                    playPauseButtonPressed();
+                    break;
+
+                case "Stop":
+                    stopButtonPressed();
+                    break;
+
+                case "Record":
+                    recordButtonPressed();
+                    break;
+
+                case "Pause":
+                    playPauseButtonPressed();
                     break;
 
                 default:
@@ -104,46 +178,189 @@ public class UIMenuActionReciever : MonoBehaviour {
 
 	}
 
-    public void savedFile(string fileName)
+    /// <summary>
+    /// triggered when a kp is selected in the kp list  
+    /// </summary>
+    /// <param name="keyPointIndex">Index of the KP selected</param>
+    public void KeyPointsListClicked(int keyPointIndex)
     {
-
+        setStatus("Jumping to Key Point " + keyPointIndex);
+        translationLayerObject.GetComponent<TranslationLayer>().JumpToKeyPoint(keyPointIndex);
     }
 
-    public void exportedFile(string fileName)
+    #endregion
+
+    /// <summary>
+    /// changes the status of the play/pause button
+    /// </summary>
+    /// <param name="newStatus"></param>
+    public void setPlayPauseButtonStatus(ButtonState newStatus)
     {
+        switch (newStatus)
+        {
 
-    }
+            case ButtonState.Paused:
+                PlayButton.GetComponentInChildren<UISprite>().spriteName = "play";
+                break;
 
-    public void openedFile(string fileName)
-    {
+            case ButtonState.Playing:
+                PlayButton.GetComponentInChildren<UISprite>().spriteName = "pause";
+                break;
 
+        }
     }
 
     /// <summary>
-    /// opens the file of the given fileName
+    /// changes the status of the record button
     /// </summary>
-    /// <param name="fileName"></param>
-    public void openFile(string fileName)
+    /// <param name="newStatus"></param>
+    public void setRecordButtonStatus(ButtonState newStatus)
+    {
+        switch (newStatus)
+        {
+
+            case ButtonState.Recording:
+                RecordButton.GetComponentInChildren<UISprite>().spriteName = "record_pressed";
+                break;
+
+            case ButtonState.Not_Recording:
+                RecordButton.GetComponentInChildren<UISprite>().spriteName = "record_normal";
+                break;
+
+        }
+    }
+
+    /// <summary>
+    /// called when the play button is pressed
+    /// </summary>
+    public void playPauseButtonPressed()
+    {
+        //check the status and switch accordingly
+        switch (playButtonStatus)
+        {
+            case ButtonState.Paused:
+                start_playing();
+                break;
+
+            case ButtonState.Playing:
+                pause_playing();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// called when the play button is pressed
+    /// </summary>
+    public void recordButtonPressed()
+    {
+        //check the status and switch accordingly
+        switch (recordButtonStatus)
+        {
+            case ButtonState.Recording:
+                stop_recording();
+                break;
+
+            case ButtonState.Not_Recording:
+                start_recording();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// called when the stop button is pressed
+    /// </summary>
+    public void stopButtonPressed()
+    {
+        if (recordButtonStatus == ButtonState.Recording)
+        {
+            stop_recording();
+        }
+
+        else if (playButtonStatus == ButtonState.Playing)
+        {
+            stop_playing();
+        }
+
+        else setStatus("Nothing to stop, sorry!");
+    }
+
+    /// <summary>
+    /// stops playback
+    /// </summary>
+    public void stop_playing()
+    {
+        setStatus("Playback Stopped");
+        playButtonStatus = ButtonState.Playing;
+        setPlayPauseButtonStatus(ButtonState.Paused);
+        translationLayerObject.GetComponent<TranslationLayer>().StopPlaying();
+    }
+
+    /// <summary>
+    /// starts playing
+    /// </summary>
+    public void pause_playing()
+    {
+        setStatus("Playback Paused");
+        playButtonStatus = ButtonState.Paused;
+        setPlayPauseButtonStatus(ButtonState.Paused);
+        translationLayerObject.GetComponent<TranslationLayer>().PausePlaying();
+    }
+
+    /// <summary>
+    /// stops playing
+    /// </summary>
+    public void start_playing()
+    {
+        setStatus("Playing Recorded Movements");
+        playButtonStatus = ButtonState.Playing;
+        setPlayPauseButtonStatus(ButtonState.Playing);
+        translationLayerObject.GetComponent<TranslationLayer>().StartPlaying();
+    }
+
+    /// <summary>
+    /// starts recording
+    /// </summary>
+    public void start_recording()
+    {
+        setStatus("Recording");
+        recordButtonStatus = ButtonState.Recording;
+        setRecordButtonStatus(ButtonState.Recording);
+        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
+    }
+
+    /// <summary>
+    /// stops recording
+    /// </summary>
+    public void stop_recording()
+    {
+        setStatus("Stopping Record");
+        recordButtonStatus = ButtonState.Not_Recording;
+        setRecordButtonStatus(ButtonState.Not_Recording);
+        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
+    }
+
+    /// <summary>
+    /// opens the file open dialog
+    /// </summary>
+    public void openFileButtonPressed()
     {
         setStatus("Opening File");
         LoadGroup.SetActiveRecursively(true);
     }
 
     /// <summary>
-    /// saves the file to the given filename
+    /// saves the file save dialog
     /// </summary>
-    /// <param name="fileName"></param>
-    public void saveFile(string fileName)
+    public void saveFileButtonPressed()
     {
         setStatus("Saving to File");
         SaveGroup.SetActiveRecursively(true);
     }
 
     /// <summary>
-    /// exports the file to given filename
+    /// exports the file export dialog
     /// </summary>
-    /// <param name="fileName"></param>
-    public void exportFile(string fileName)
+    public void exportFileButtonPressed()
     {
         setStatus("Exporting to File");
         ExportGroup.SetActiveRecursively(true);
@@ -154,15 +371,77 @@ public class UIMenuActionReciever : MonoBehaviour {
         StatusLabel.GetComponent<UILabel>().text = status;
     }
 
-	/// <summary>
-	/// Callback called every time slider value is changed
-	/// </summary>
-	/// <param name='value'>
-	/// float value of the slider (between 0 and 1)
-	/// </param>
-	public void OnSliderChange(float value)
+    /// <summary>
+    /// triggered when "new file" button pressed
+    /// </summary>
+    public void newButtonPressed()
+    {
+        setStatus("Created New File");
+    }
+
+    #region IO related callbacks
+
+    /// <summary>
+    /// triggered when save dialog selects a file to save to 
+    /// </summary>
+    /// <param name="fileName">file to save to</param>
+    public void savedFile(string filePath, string fileName)
+    {
+        setStatus("Saved file to " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().SaveList(filePath);
+    }
+
+    /// <summary>
+    /// triggered when export dialog selects a file
+    /// </summary>
+    /// <param name="fileName">name of file to export to</param>
+    public void exportedFile(string filePath, string fileName)
+    {
+        setStatus("Exported file to " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().ExportList(filePath);
+    }
+
+    /// <summary>
+    /// triggered when file open dialog selects a file
+    /// </summary>
+    /// <param name="fileName">name of file to open</param>
+    public void openedFile(string filePath, string fileName)
+    {
+        setStatus("Opened file " + fileName);
+        translationLayerObject.GetComponent<TranslationLayer>().LoadList(filePath);
+    }
+
+    /// <summary>
+    /// updates the key points list with the given playback list. 
+    /// called from translationlayer
+    /// </summary>
+    /// <param name="playbackList"></param>
+    public void updateKeyPointsList(List<SerializeScript.SnapshotClass> playbackList)
+    {
+        //clear the list
+        keyPointsPanel.GetComponent<KeyPointsListPanel>().ClearList();
+
+        Debug.Log("Playlist size: " + playbackList.Count);
+
+        //add each of the kps to the list
+        for (int i = 0; i < playbackList.Count; i++)
+        {
+            keyPointsPanel.GetComponent<KeyPointsListPanel>().AddItem("Key Point " + i);
+        }
+
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Callback called every time slider value is changed
+    /// </summary>
+    /// <param name='value'>
+    /// float value of the slider (between 0 and 1)
+    /// </param>
+    public void OnSliderChange(float value)
 	{
-		Debug.Log ("Slider changed to " + value);
+
 	}
 
     public void Start()

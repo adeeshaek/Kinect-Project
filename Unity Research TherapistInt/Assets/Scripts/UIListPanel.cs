@@ -75,7 +75,6 @@ public class UIListPanel : MonoBehaviour
     {
         ReDrawPanel();
         currentSliderValue = (1-value);
-        Debug.Log("Panel Slider changed to " + value);
     }
 
     public virtual void OnSelectionChange(string item)
@@ -132,16 +131,40 @@ public class UIListPanel : MonoBehaviour
     }
 
     /// <summary>
+    /// parameterized remove
+    /// </summary>
+    /// <param name="itemIndex"></param>
+    /// <returns></returns>
+    public bool RemoveItem(int itemIndex)
+    {
+        Destroy(panelButtonList[itemIndex]);
+        panelButtonList.RemoveAt(itemIndex);
+        resequence();
+        ReDrawPanel();
+        return true;
+    }
+
+    /// <summary>
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
     public bool RemoveItem()
     {
-        Destroy(panelButtonList[selectedItem]);
-        panelButtonList.RemoveAt(selectedItem);
-        resequence();
-        ReDrawPanel();
-        return true;
+        return RemoveItem(selectedItem);
+    }
+
+    /// <summary>
+    /// removes all items in the list
+    /// </summary>
+    public void ClearList()
+    {
+        
+        for (int i = 0; i < panelButtonList.Count; i++)
+        {
+            RemoveItem(0);
+        }
+
+        Debug.Log(panelButtonList.Count);
     }
 
     /// <summary>
@@ -208,6 +231,21 @@ selectItemButtonRef.transform.position.y,
     protected void resequence()
     {
         List<GameObject> newList = new List<GameObject>();
+        GameObject current;
+
+        for (int i = 0; i < panelButtonList.Count; i++)
+        {
+            current = panelButtonList[i];
+
+            if (current != null)
+            {
+                newList.Add(current);
+            }
+
+        }
+
+        //CHANGE ITEM NAME TO ITEM NUMBER
+        ///
 
         foreach (GameObject item in panelButtonList)
         {

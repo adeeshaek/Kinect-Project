@@ -14,6 +14,11 @@ public class UILoadPanel : UIListPanel
     public string selectedItemPath;
 
     /// <summary>
+    /// name of the selected item
+    /// </summary>
+    public string selectedItemName;
+
+    /// <summary>
     /// reference to reciever
     /// </summary>
     public GameObject NGUIReciever;
@@ -70,11 +75,18 @@ public class UILoadPanel : UIListPanel
     /// </summary>
     public void OpenFile()
     {
-        selectedItemPath = Directory.GetCurrentDirectory() + "\\" + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        selectedItemName = selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        selectedItemPath = Directory.GetCurrentDirectory() +
+            "\\" + selectItemButtonRef.GetComponentInChildren<UILabel>().text;
+        /*
         Debug.Log(selectedItemPath);
         NGUIReciever.GetComponent<UIMenuActionReciever>().currentlySelectedFile = selectedItemPath;
         NGUIReciever.GetComponent<UIMenuActionReciever>()
             .setStatus("Opened File " + selectItemButtonRef.GetComponentInChildren<UILabel>().text);
+       */
+        NGUIReciever.GetComponent<UIMenuActionReciever>()
+            .openedFile(selectedItemPath, selectedItemName);
+        
         MakeInvisible();
     }
 
