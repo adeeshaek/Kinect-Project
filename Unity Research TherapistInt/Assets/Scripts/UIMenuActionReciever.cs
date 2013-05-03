@@ -120,7 +120,7 @@ public class UIMenuActionReciever : MonoBehaviour
                     break;
 
                 case "RemoveKPButton":
-                    bool success = keyPointsPanel.GetComponent<UIListPanel>().RemoveItem();
+                    bool success = keyPointsPanel.GetComponent<KeyPointsListPanel>().RemoveItem();
                     if (success)
                         setStatus("Key Point " + " removed");
                     else
@@ -379,6 +379,19 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Created New File");
     }
 
+    #region key points list related callbacks
+
+    /// <summary>
+    /// removes the key point. called by KeyPointsListPanel
+    /// </summary>
+    /// <param name="index"></param>
+    public void removeKeyPoint(int index)
+    {
+        Debug.Log("Delete called");
+        translationLayerObject.GetComponent<TranslationLayer>().DeleteKeyPoint(index);
+    }
+
+
     #region IO related callbacks
 
     /// <summary>
@@ -433,6 +446,8 @@ public class UIMenuActionReciever : MonoBehaviour
 
     #endregion
 
+    #endregion
+
     /// <summary>
     /// Callback called every time slider value is changed
     /// </summary>
@@ -449,4 +464,14 @@ public class UIMenuActionReciever : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// makes system sleep for a given time
+    /// </summary>
+    /// <param name="seconds"></param>
+    /// <returns></returns>
+    IEnumerator waitForSeconds(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
+    
 }

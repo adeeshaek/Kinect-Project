@@ -123,7 +123,7 @@ public class UIListPanel : MonoBehaviour
         newPanelButton.transform.parent = gameObject.transform;
         newPanelButton.transform.localScale = new Vector3(1, 1, 1);
         newPanelButton.GetComponentInChildren<UILabel>().text = myText;
-        newPanelButton.GetComponent<UIPanelItemButton>().index = numberOfButtonsInclusive - 1;
+        newPanelButton.GetComponent<UILoadSavePanelButton>().index = numberOfButtonsInclusive - 1;
 
         panelButtonList.Add(newPanelButton);
 
@@ -210,14 +210,14 @@ selectItemButtonRef.transform.position.y,
             if (currentPanelButton.transform.position.y < maxThresh
                 && currentPanelButton.transform.position.y > minThresh)
             {
-                currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
+                currentPanelButton.GetComponent<UILoadSavePanelButton>().MakeVisible();
 
             }
 
             //make button disappear if too many buttons displayed
             else
             {
-                currentPanelButton.GetComponent<UIPanelItemButton>().MakeInvisible();
+                currentPanelButton.GetComponent<UILoadSavePanelButton>().MakeInvisible();
             }
 
         }

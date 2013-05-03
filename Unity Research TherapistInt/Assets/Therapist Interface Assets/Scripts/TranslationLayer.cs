@@ -161,6 +161,7 @@ public class TranslationLayer : MonoBehaviour {
         Debug.Log("List " + fileNameIn + " succesfully loaded");
         StopPlaying(); //reset playback
         SyncLists(); //refresh keypointslist
+        UpdateGUIKPList();
     }
 
     /// <summary>
@@ -199,7 +200,6 @@ public class TranslationLayer : MonoBehaviour {
             Debug.Log(" " + keypointsList.Count + " key points total");
         }
 
-        UpdateGUIKPList();
     }
 
     /// <summary>

@@ -169,6 +169,7 @@
      <Compile Include="Assets\Scripts\UIExportPanel.cs" />
      <Compile Include="Assets\Scripts\UIListPanel.cs" />
      <Compile Include="Assets\Scripts\UILoadPanel.cs" />
+     <Compile Include="Assets\Scripts\UILoadSavePanelButton.cs" />
      <Compile Include="Assets\Scripts\UIMenuActionReciever.cs" />
      <Compile Include="Assets\Scripts\UIPanelButton.cs" />
      <Compile Include="Assets\Scripts\UIPanelItemButton.cs" />

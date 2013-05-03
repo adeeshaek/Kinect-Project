@@ -17,11 +17,26 @@ public class UIPanelItemButton: UIButton {
 
     public int frameIndex;
 
+    /// <summary>
+    /// sets the index of this button
+    /// </summary>
+    /// <param name="indexIn"></param>
+    public void setIndex(int indexIn)
+    {
+        index = indexIn;
+    }
+
+    /// <summary>
+    /// called on click
+    /// </summary>
 	public void OnClick()
 	{
-        gameObject.transform.parent.GetComponent<UIListPanel>().OnPanelButtonClick(index);
+        gameObject.transform.parent.GetComponent<KeyPointsListPanel>().OnPanelButtonClick(index);
 	}
 
+    /// <summary>
+    /// makes this button invisible
+    /// </summary>
     public void MakeInvisible()
     {
         gameObject.GetComponentInChildren<UILabel>().enabled = false;
@@ -29,6 +44,9 @@ public class UIPanelItemButton: UIButton {
         gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 
+    /// <summary>
+    /// makes the button visible
+    /// </summary>
     public void MakeVisible()
     {
         gameObject.GetComponentInChildren<UILabel>().enabled = true;
