@@ -111,6 +111,18 @@ public class TranslationLayer : MonoBehaviour {
 
 #endregion
 
+    #region Gui related methods
+
+    /// <summary>
+    /// updates the slider value
+    /// </summary>
+    public void updateSlider()
+    {
+        NGUIReciever.GetComponent<UIMenuActionReciever>().UpdateSlider(currentFrame, playbackList.Count);
+    }
+
+    #endregion
+
     #region List modifier methods
 
     /// <summary>
@@ -338,7 +350,8 @@ public class TranslationLayer : MonoBehaviour {
         isPlaying = false;
         currentFrame = 0;
         GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>().RotateToCalibrationPose();
-        GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count); //reset slider
+        updateSlider();
+        //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count); //reset slider
         ResumeTracking();
     }
 
@@ -394,6 +407,7 @@ public class TranslationLayer : MonoBehaviour {
     {
         isPlaying = false;
         currentFrame = 0;
+        updateSlider();
     }
 
     /// <summary>
@@ -402,7 +416,7 @@ public class TranslationLayer : MonoBehaviour {
     /// <param name="sliderIndexIn">Index of slider</param>
     public void HandleSliderChange(float sliderIndexIn)
     {
-        float targetFrame = ((sliderIndexIn / 100) * playbackList.Count);
+        float targetFrame = (sliderIndexIn * playbackList.Count);
         currentFrame = (int)targetFrame;
         PlayFrame();
     }
@@ -414,6 +428,7 @@ public class TranslationLayer : MonoBehaviour {
     public void JumpToKeyPoint(int keyPointIndexIn)
     {
         JumpToFrame(keypointsList[keyPointIndexIn].frameID);
+        updateSlider();
     }
 
     /// <summary>
@@ -442,7 +457,7 @@ public class TranslationLayer : MonoBehaviour {
     {
         currentFrame = frameIndex;
         PlayFrame();
-        GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count);
+        //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count);
     }
 #endregion
 
@@ -659,7 +674,8 @@ public class TranslationLayer : MonoBehaviour {
     {
         if (isPlaying)
         {
-            GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count);
+            //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateSlider(currentFrame, playbackList.Count);
+            updateSlider();
             PlayFrame();
         }
 

@@ -19,6 +19,7 @@ public class UIMenuActionReciever : MonoBehaviour
     {
         Playing,
         Paused,
+        Stopped,
         Recording,
         Not_Recording
     };
@@ -73,6 +74,11 @@ public class UIMenuActionReciever : MonoBehaviour
     /// reference to record button
     /// </summary>
     public GameObject RecordButton;
+
+    /// <summary>
+    /// ref to slider
+    /// </summary>
+    public GameObject Slider;
 
     /// <summary>
     /// selected index
@@ -238,6 +244,7 @@ public class UIMenuActionReciever : MonoBehaviour
         //check the status and switch accordingly
         switch (playButtonStatus)
         {
+            case ButtonState.Stopped:
             case ButtonState.Paused:
                 start_playing();
                 break;
@@ -276,12 +283,11 @@ public class UIMenuActionReciever : MonoBehaviour
             stop_recording();
         }
 
-        else if (playButtonStatus == ButtonState.Playing)
+        else
         {
             stop_playing();
         }
 
-        else setStatus("Nothing to stop, sorry!");
     }
 
     /// <summary>
@@ -290,7 +296,7 @@ public class UIMenuActionReciever : MonoBehaviour
     public void stop_playing()
     {
         setStatus("Playback Stopped");
-        playButtonStatus = ButtonState.Playing;
+        playButtonStatus = ButtonState.Stopped;
         setPlayPauseButtonStatus(ButtonState.Paused);
         translationLayerObject.GetComponent<TranslationLayer>().StopPlaying();
     }
@@ -456,8 +462,22 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </param>
     public void OnSliderChange(float value)
 	{
-
+        translationLayerObject.GetComponent<TranslationLayer>().HandleSliderChange(value);
 	}
+
+    /// <summary>
+    /// sets slider value
+    /// </summary>
+    /// <param name="currentFrameIndexIn"></param>
+    /// <param name="maxFramesIn"></param>
+    public void UpdateSlider(int currentFrameIndexIn, int maxFramesIn)
+    {
+        float sliderValue = ((float)currentFrameIndexIn / (float)maxFramesIn);
+        Debug.Log(sliderValue);
+        
+        Slider.GetComponent<UISlider>().sliderValue = sliderValue;
+        Slider.GetComponent<UISlider>().ForceUpdate();
+    }
 
     public void Start()
     {
