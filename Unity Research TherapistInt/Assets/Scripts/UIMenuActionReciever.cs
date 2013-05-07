@@ -119,19 +119,11 @@ public class UIMenuActionReciever : MonoBehaviour
             switch (item)
             {
                 case "AddKPButton":
-                    //adding frame 0 for now
-                    keyPointsPanel.GetComponent<UIListPanel>().AddItem(currentIndex.ToString());
-                    setStatus("Key Point " + currentIndex + " added");
-                    currentIndex++;
+                    AddKPButtonPressed();
                     break;
 
                 case "RemoveKPButton":
-                    bool success = keyPointsPanel.GetComponent<KeyPointsListPanel>().RemoveItem();
-                    if (success)
-                        setStatus("Key Point " + " removed");
-                    else
-                        setStatus("Key Point not removed");
-
+                    RemoveKPButtonPressed();
                     break;
 
                 case "PlayButton":
@@ -183,6 +175,35 @@ public class UIMenuActionReciever : MonoBehaviour
         }
 
 	}
+
+    /// <summary>
+    /// Adds a new key point
+    /// </summary>
+    public void AddKPButtonPressed()
+    {
+        //adding frame 0 for now
+        translationLayerObject.GetComponent<TranslationLayer>().AddKeyPoint();
+        keyPointsPanel.GetComponent<KeyPointsListPanel>().AddItem(currentIndex.ToString());
+        setStatus("Key Point " + currentIndex + " added");
+        currentIndex++;
+    }
+    
+    /// <summary>
+    /// Removes a new key point
+    /// </summary>
+    public void RemoveKPButtonPressed()
+    {
+        int currentlySelectedKeyPoint 
+            = keyPointsPanel.GetComponent<KeyPointsListPanel>().getCurrentlySelectedKeyPoint();
+
+        translationLayerObject.GetComponent<TranslationLayer>().DeleteKeyPoint(currentlySelectedKeyPoint);
+
+        bool success = keyPointsPanel.GetComponent<KeyPointsListPanel>().RemoveItem();
+        if (success)
+            setStatus("Key Point " + " removed");
+        else
+            setStatus("Key Point not removed");
+    }
 
     /// <summary>
     /// triggered when a kp is selected in the kp list  
@@ -328,6 +349,7 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void start_recording()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
         setStatus("Recording");
         recordButtonStatus = ButtonState.Recording;
         setRecordButtonStatus(ButtonState.Recording);
@@ -339,6 +361,7 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void stop_recording()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
         setStatus("Stopping Record");
         recordButtonStatus = ButtonState.Not_Recording;
         setRecordButtonStatus(ButtonState.Not_Recording);

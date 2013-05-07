@@ -161,6 +161,15 @@ public class KeyPointsListPanel : MonoBehaviour
     }
 
     /// <summary>
+    /// returns the currently selected KP id to the caller
+    /// </summary>
+    /// <returns>index of currently selected key point</returns>
+    public int getCurrentlySelectedKeyPoint()
+    {
+        return selectedItem;
+    }
+
+    /// <summary>
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
