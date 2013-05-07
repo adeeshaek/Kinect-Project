@@ -349,11 +349,10 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void start_recording()
     {
-        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
+        translationLayerObject.GetComponent<TranslationLayer>().StartRecordingInstruction();
         setStatus("Recording");
         recordButtonStatus = ButtonState.Recording;
         setRecordButtonStatus(ButtonState.Recording);
-        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
     }
 
     /// <summary>
@@ -361,11 +360,10 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void stop_recording()
     {
-        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
+        translationLayerObject.GetComponent<TranslationLayer>().StopRecordingInstruction();
         setStatus("Stopping Record");
         recordButtonStatus = ButtonState.Not_Recording;
         setRecordButtonStatus(ButtonState.Not_Recording);
-        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
     }
 
     /// <summary>

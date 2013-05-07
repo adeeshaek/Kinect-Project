@@ -165,6 +165,7 @@
      <Compile Include="Assets\Scripts\ExtendedUIButton.cs" />
      <Compile Include="Assets\Scripts\ExtendedUIPlaybackButton.cs" />
      <Compile Include="Assets\Scripts\ExtendedZigSkeleton.cs" />
+     <Compile Include="Assets\Scripts\GestureTracker.cs" />
      <Compile Include="Assets\Scripts\KeyPointsListPanel.cs" />
      <Compile Include="Assets\Scripts\UIExportPanel.cs" />
      <Compile Include="Assets\Scripts\UIListPanel.cs" />

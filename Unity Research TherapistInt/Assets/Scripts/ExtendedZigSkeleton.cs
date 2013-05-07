@@ -222,7 +222,6 @@ public class ExtendedZigSkeleton : ZigSkeleton {
 
         //Now redo using dot product of euclidian vectors
 
-
     }
 
     public double CheckForFullBodyPose(List<Quaternion> PosesIn)
