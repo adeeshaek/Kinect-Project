@@ -8,12 +8,12 @@ public class BigGUIScript : MonoBehaviour {
     /// <summary>
     /// time for each message to appear
     /// </summary>
-    public int cooldownTime = 5;
+    public float cooldownTime = 5.0f;
 
     /// <summary>
     /// current value of counter
     /// </summary>
-    int countdownvalue;
+    float countdownvalue;
 
     /// <summary>
     /// whether or not the text is visible
@@ -31,6 +31,14 @@ public class BigGUIScript : MonoBehaviour {
     }
 
     /// <summary>
+    /// makes the big gui text disappear
+    /// </summary>
+    public void makeTextDisappear()
+    {
+        gameObject.GetComponent<UILabel>().enabled = false;
+    }
+
+    /// <summary>
     /// decrements the counter, and makes the text invisible
     /// when needed
     /// </summary>
@@ -38,20 +46,18 @@ public class BigGUIScript : MonoBehaviour {
     {
         if (countdownvalue > 0)
         {
-            countdownvalue--;
+            countdownvalue = countdownvalue-Time.deltaTime;
         }
 
         else //hide the text
         {
-            Debug.Log("Stopped");
             textIsVisible = false;
             gameObject.GetComponent<UILabel>().enabled = false;
         }
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (textIsVisible)
-            decrementCounter();
+        decrementCounter();
     }
 }

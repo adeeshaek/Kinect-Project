@@ -370,6 +370,7 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Stopping Record");
         recordButtonStatus = ButtonState.Not_Recording;
         setRecordButtonStatus(ButtonState.Not_Recording);
+        makeBigGuiDisappear();
     }
 
     /// <summary>
@@ -539,6 +540,13 @@ public class UIMenuActionReciever : MonoBehaviour
         bigGuiTextObject.GetComponent<BigGUIScript>().displayText(statusMessage);        
     }
 
+    /// <summary>
+    /// makes the big gui disappear
+    /// </summary>
+    void makeBigGuiDisappear()
+    {
+        bigGuiTextObject.GetComponent<BigGUIScript>().makeTextDisappear();
+    }
     #endregion
 
 }

@@ -179,6 +179,8 @@ public class GestureTracker : MonoBehaviour {
     public void stopListeningForGestures()
     {
         destroyTrackingClone();
+        isListeningForGestures = false;
+
     }
 
     void gestureSuccesfullyHeld()
