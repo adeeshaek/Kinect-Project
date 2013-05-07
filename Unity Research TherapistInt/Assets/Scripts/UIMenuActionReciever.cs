@@ -543,7 +543,7 @@ public class UIMenuActionReciever : MonoBehaviour
     /// <summary>
     /// makes the big gui disappear
     /// </summary>
-    void makeBigGuiDisappear()
+    public void makeBigGuiDisappear()
     {
         bigGuiTextObject.GetComponent<BigGUIScript>().makeTextDisappear();
     }

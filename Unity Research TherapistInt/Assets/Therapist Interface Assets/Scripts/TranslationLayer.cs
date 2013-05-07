@@ -522,7 +522,7 @@ public class TranslationLayer : MonoBehaviour {
     {
         isWaitingForGesture = false;
         StartRecording();
-        
+        NGUIReciever.GetComponent<UIMenuActionReciever>().makeBigGuiDisappear();
     }
 
     /// <summary>
