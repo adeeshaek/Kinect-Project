@@ -44,9 +44,15 @@ public class TranslationLayer : MonoBehaviour {
 
     /// <summary>
     /// Reference to NGUI reciever
+    /// 
+    /// ***Much better way to keep refs to game objects; deprecate the older method**
     /// </summary>
     public GameObject NGUIReciever;
 
+    /// <summary>
+    /// reference to object which checks for gestures
+    /// </summary>
+    public GameObject gestureCheckObject;
 
     #region Lists and playback related variables
 
@@ -80,10 +86,14 @@ public class TranslationLayer : MonoBehaviour {
         /// </summary>
         public int currentFrame = 0;
 
+        #region tracking related variables
+
         /// <summary>
-        /// Flags true if listening for a pose
+        /// checks if waiting for gesture
         /// </summary>
-        public bool listeningForGesture = false;
+        bool isWaitingForGesture = false;
+
+        #endregion
 
         #region seated mode
 
@@ -289,6 +299,17 @@ public class TranslationLayer : MonoBehaviour {
         if (playbackList != null)
             backupList.AddRange(playbackList); //copy playbackList to backupList
     }
+
+    /// <summary>
+    /// Creates a new file by clearing the lists already in memory
+    /// </summary>
+    public void NewFile()
+    {
+        StopPlaying();
+        playbackList.Clear();
+        SyncLists();
+        UpdateGUIKPList();
+    }
 #endregion
 
     #region playback related methods
@@ -416,9 +437,12 @@ public class TranslationLayer : MonoBehaviour {
     /// <param name="sliderIndexIn">Index of slider</param>
     public void HandleSliderChange(float sliderIndexIn)
     {
-        float targetFrame = (sliderIndexIn * playbackList.Count);
-        currentFrame = (int)targetFrame;
-        PlayFrame();
+        if (playbackList.Count > 0)
+        {
+            float targetFrame = (sliderIndexIn * playbackList.Count);
+            currentFrame = (int)targetFrame;
+            PlayFrame();
+        }
     }
 
     /// <summary>
@@ -462,6 +486,63 @@ public class TranslationLayer : MonoBehaviour {
 #endregion
 
     #region Recording related methods
+
+    /// <summary>
+    /// instruction from the gui to start recording
+    /// </summary>
+    public void StartRecordingInstruction()
+    {
+        if (!isWaitingForGesture)
+        {
+            StartListeningForGesture();
+        }
+    }
+
+    /// <summary>
+    /// instruction from the gui to stop recording
+    /// </summary>
+    public void StopRecordingInstruction()
+    {
+        if (isWaitingForGesture)
+        {
+            StopListeningForGesture();
+        }
+
+        else
+        {
+            StopRecording();
+        }
+    }
+
+    /// <summary>
+    /// informs system that the gesture was held succesfully
+    /// so recording can begin
+    /// </summary>
+    public void GestureSuccesfullyHeld()
+    {
+        isWaitingForGesture = false;
+        StartRecording();
+        NGUIReciever.GetComponent<UIMenuActionReciever>().makeBigGuiDisappear();
+    }
+
+    /// <summary>
+    /// Makes system wait for the gesture to start recording
+    /// </summary>
+    public void StartListeningForGesture()
+    {
+        gestureCheckObject.GetComponent<GestureTracker>().startListeningForGestures();
+        isWaitingForGesture = true;
+    }
+
+    /// <summary>
+    /// Makes system stop waiting for gesture to start recording
+    /// </summary>
+    public void StopListeningForGesture()
+    {
+        gestureCheckObject.GetComponent<GestureTracker>().stopListeningForGestures();
+        isWaitingForGesture = false;
+    }
+
     /// <summary>
     /// Start recording user's movements
     /// </summary>
@@ -586,53 +667,6 @@ public class TranslationLayer : MonoBehaviour {
     #region Gesture tracking methods
 
     /// <summary>
-    /// Initializes the gesture tracking process
-    /// </summary>
-    public void StartListeningForGesture()
-    {
-        //make carl assume the keypoint pose
-        //GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-          //  .JumpToFrame(playbackList[keypointsList[0].frameID]);
-
-        //make listening=true
-        listeningForGesture = true;
-    }
-
-    /// <summary>
-    /// Checks the tracking stream if the current posture matches the
-    /// one of the keypoint passed in
-    /// 
-    /// Invoked by timerTick if isListening is true
-    /// </summary>
-    public void ListenForGesture()
-    {
-        //check the first keypoint
-        if (keypointsList != null)
-            if (keypointsList[0] != null)
-            {
-
-                //send snapshot to be checked
-                SerializeScript.SnapshotClass checkSnap =
-                    new SerializeScript.SnapshotClass();
-                checkSnap = playbackList[keypointsList[0].frameID]; //assign snapshot
-
-                //gather Eulerinfo on movement of character's left arm
-                //Quaternion poseIn = GameObject.Find(indicatorGameObjectName).GetComponent<ZigSkeleton>()
-                  //  .ReturnLeftArmPose();
-
-                //GameObject.Find(avatarGameObjectName).GetComponent<ZigSkeleton>()
-                  //  .CheckForPose(checkSnap, poseIn); //pass snap to thingy
-
-            }
-
-            else
-                listeningForGesture = false;
-
-        else
-            listeningForGesture = false;
-    }
-
-    /// <summary>
     /// Updates text on the GUIText control to match that in the avatar
     /// </summary>
     public void UpdateGuiText()
@@ -660,7 +694,6 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void UpdateGUIKPList()
     {
-        //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateKPList();
         NGUIReciever.GetComponent<UIMenuActionReciever>().updateKeyPointsList(keypointsList);
     }
 
@@ -679,8 +712,7 @@ public class TranslationLayer : MonoBehaviour {
             PlayFrame();
         }
 
-        if (listeningForGesture)
-            ListenForGesture();
+        gestureCheckObject.GetComponent<GestureTracker>().tickEvent();
 
         if (isRecording)
             RecordFrame();

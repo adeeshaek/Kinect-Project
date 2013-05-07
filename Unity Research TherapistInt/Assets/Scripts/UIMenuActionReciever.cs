@@ -81,6 +81,16 @@ public class UIMenuActionReciever : MonoBehaviour
     public GameObject Slider;
 
     /// <summary>
+    /// name of big Guitext gameobject
+    /// </summary>
+    public GameObject bigGuiTextObject;
+
+    /// <summary>
+    /// settings menu
+    /// </summary>
+    public GameObject settingsMenu;
+
+    /// <summary>
     /// selected index
     /// </summary>
     int currentIndex = 0;
@@ -119,19 +129,11 @@ public class UIMenuActionReciever : MonoBehaviour
             switch (item)
             {
                 case "AddKPButton":
-                    //adding frame 0 for now
-                    keyPointsPanel.GetComponent<UIListPanel>().AddItem(currentIndex.ToString());
-                    setStatus("Key Point " + currentIndex + " added");
-                    currentIndex++;
+                    AddKPButtonPressed();
                     break;
 
                 case "RemoveKPButton":
-                    bool success = keyPointsPanel.GetComponent<KeyPointsListPanel>().RemoveItem();
-                    if (success)
-                        setStatus("Key Point " + " removed");
-                    else
-                        setStatus("Key Point not removed");
-
+                    RemoveKPButtonPressed();
                     break;
 
                 case "PlayButton":
@@ -174,6 +176,10 @@ public class UIMenuActionReciever : MonoBehaviour
                     playPauseButtonPressed();
                     break;
 
+                case "Settings":
+                    showSettingsView();
+                    break;
+
                 default:
                     //fill in later
                     break;
@@ -183,6 +189,35 @@ public class UIMenuActionReciever : MonoBehaviour
         }
 
 	}
+
+    /// <summary>
+    /// Adds a new key point
+    /// </summary>
+    public void AddKPButtonPressed()
+    {
+        //adding frame 0 for now
+        translationLayerObject.GetComponent<TranslationLayer>().AddKeyPoint();
+        keyPointsPanel.GetComponent<KeyPointsListPanel>().AddItem(currentIndex.ToString());
+        setStatus("Key Point " + currentIndex + " added");
+        currentIndex++;
+    }
+    
+    /// <summary>
+    /// Removes a new key point
+    /// </summary>
+    public void RemoveKPButtonPressed()
+    {
+        int currentlySelectedKeyPoint 
+            = keyPointsPanel.GetComponent<KeyPointsListPanel>().getCurrentlySelectedKeyPoint();
+
+        translationLayerObject.GetComponent<TranslationLayer>().DeleteKeyPoint(currentlySelectedKeyPoint);
+
+        bool success = keyPointsPanel.GetComponent<KeyPointsListPanel>().RemoveItem();
+        if (success)
+            setStatus("Key Point " + " removed");
+        else
+            setStatus("Key Point not removed");
+    }
 
     /// <summary>
     /// triggered when a kp is selected in the kp list  
@@ -328,10 +363,11 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void start_recording()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().StartRecordingInstruction();
+        setBigGuiStatus("Please assume pose to record");
         setStatus("Recording");
         recordButtonStatus = ButtonState.Recording;
         setRecordButtonStatus(ButtonState.Recording);
-        translationLayerObject.GetComponent<TranslationLayer>().StartRecording();
     }
 
     /// <summary>
@@ -339,10 +375,11 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void stop_recording()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().StopRecordingInstruction();
         setStatus("Stopping Record");
         recordButtonStatus = ButtonState.Not_Recording;
         setRecordButtonStatus(ButtonState.Not_Recording);
-        translationLayerObject.GetComponent<TranslationLayer>().StopRecording();
+        makeBigGuiDisappear();
     }
 
     /// <summary>
@@ -382,6 +419,8 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void newButtonPressed()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().NewFile();
+
         setStatus("Created New File");
     }
 
@@ -472,8 +511,11 @@ public class UIMenuActionReciever : MonoBehaviour
     /// <param name="maxFramesIn"></param>
     public void UpdateSlider(int currentFrameIndexIn, int maxFramesIn)
     {
-        float sliderValue = ((float)currentFrameIndexIn / (float)maxFramesIn);
-        Debug.Log(sliderValue);
+        float sliderValue;
+        if (maxFramesIn == 0)
+            sliderValue = 0.0f;
+        else
+            sliderValue = ((float)currentFrameIndexIn / (float)maxFramesIn);
         
         Slider.GetComponent<UISlider>().sliderValue = sliderValue;
         Slider.GetComponent<UISlider>().ForceUpdate();
@@ -493,5 +535,40 @@ public class UIMenuActionReciever : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
     }
-    
+
+    #region big gui message related methods
+
+    /// <summary>
+    /// sets the text of the big gui message. makes it active,
+    /// then makes it visible for several seconds, then makes 
+    /// it inactive
+    /// </summary>
+    /// <param name="statusMessage"></param>
+    void setBigGuiStatus(string statusMessage)
+    {
+        bigGuiTextObject.GetComponent<BigGUIScript>().displayText(statusMessage);        
+    }
+
+    /// <summary>
+    /// makes the big gui disappear
+    /// </summary>
+    public void makeBigGuiDisappear()
+    {
+        bigGuiTextObject.GetComponent<BigGUIScript>().makeTextDisappear();
+    }
+    #endregion
+
+    #region settings menu related methods
+
+    /// <summary>
+    /// shows the settings view
+    /// </summary>
+    public void showSettingsView()
+    {
+        setStatus("Opening Settings Menu");
+        settingsMenu.SetActiveRecursively(true);
+    }
+
+    #endregion
+
 }

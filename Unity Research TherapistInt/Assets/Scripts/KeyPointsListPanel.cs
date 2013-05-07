@@ -161,6 +161,15 @@ public class KeyPointsListPanel : MonoBehaviour
     }
 
     /// <summary>
+    /// returns the currently selected KP id to the caller
+    /// </summary>
+    /// <returns>index of currently selected key point</returns>
+    public int getCurrentlySelectedKeyPoint()
+    {
+        return selectedItem;
+    }
+
+    /// <summary>
     /// removes the given key point
     /// </summary>
     /// <param name="keyPointToRemove"></param>
@@ -174,12 +183,14 @@ public class KeyPointsListPanel : MonoBehaviour
     /// </summary>
     public void ClearList()
     {
-
+       
         for (int i = 0; i < panelButtonList.Count; i++)
         {
-            RemoveItem(0);
+            Destroy(panelButtonList[i]);
         }
-
+        
+        panelButtonList.Clear();
+        ReDrawPanel();
         Debug.Log("Number of items after clearing: " + panelButtonList.Count);
     }
 
@@ -227,7 +238,6 @@ selectItemButtonRef.transform.position.y,
                 && currentPanelButton.transform.position.y > minThresh)
             {
                 currentPanelButton.GetComponent<UIPanelItemButton>().MakeVisible();
-
             }
 
             //make button disappear if too many buttons displayed
