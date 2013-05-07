@@ -522,6 +522,7 @@ public class TranslationLayer : MonoBehaviour {
     {
         isWaitingForGesture = false;
         StartRecording();
+        
     }
 
     /// <summary>

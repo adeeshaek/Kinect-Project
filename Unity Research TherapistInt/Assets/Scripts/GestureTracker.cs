@@ -122,7 +122,10 @@ public class GestureTracker : MonoBehaviour {
         isHoldingPose = CheckForPose(avatarPose, targetPose);
 
         if (isHoldingPose)
+        {
             gestureSuccesfullyHeld();
+            isListeningForGestures = false;
+        }
     }
 
     /// <summary>

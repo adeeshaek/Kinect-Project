@@ -81,6 +81,11 @@ public class UIMenuActionReciever : MonoBehaviour
     public GameObject Slider;
 
     /// <summary>
+    /// name of big Guitext gameobject
+    /// </summary>
+    public GameObject bigGuiTextObject;
+
+    /// <summary>
     /// selected index
     /// </summary>
     int currentIndex = 0;
@@ -350,6 +355,7 @@ public class UIMenuActionReciever : MonoBehaviour
     public void start_recording()
     {
         translationLayerObject.GetComponent<TranslationLayer>().StartRecordingInstruction();
+        setBigGuiStatus("Please assume pose to record");
         setStatus("Recording");
         recordButtonStatus = ButtonState.Recording;
         setRecordButtonStatus(ButtonState.Recording);
@@ -519,5 +525,20 @@ public class UIMenuActionReciever : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
     }
-    
+
+    #region big gui message related methods
+
+    /// <summary>
+    /// sets the text of the big gui message. makes it active,
+    /// then makes it visible for several seconds, then makes 
+    /// it inactive
+    /// </summary>
+    /// <param name="statusMessage"></param>
+    void setBigGuiStatus(string statusMessage)
+    {
+        bigGuiTextObject.GetComponent<BigGUIScript>().displayText(statusMessage);        
+    }
+
+    #endregion
+
 }
