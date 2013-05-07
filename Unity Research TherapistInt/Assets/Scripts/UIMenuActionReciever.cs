@@ -180,6 +180,10 @@ public class UIMenuActionReciever : MonoBehaviour
                     showSettingsView();
                     break;
 
+                case "settings close":
+                    closeSettingsView();
+                    break;
+
                 default:
                     //fill in later
                     break;
@@ -568,6 +572,32 @@ public class UIMenuActionReciever : MonoBehaviour
         setStatus("Opening Settings Menu");
         settingsMenu.SetActiveRecursively(true);
     }
+
+    /// <summary>
+    /// closes the settings view
+    /// </summary>
+    public void closeSettingsView()
+    {
+        setStatus("Settings menu closed");
+        settingsMenu.SetActiveRecursively(false);
+    }
+
+    /// <summary>
+    /// called when checkmark is checked. 
+    /// </summary>
+    public void OnActivate(bool isSelected)
+    {
+        if (isSelected)
+        {
+            translationLayerObject.GetComponent<TranslationLayer>().EnableSeatedMode();
+        }
+
+        else
+        {
+            translationLayerObject.GetComponent<TranslationLayer>().DisableSeatedMode();
+        }
+    }
+
 
     #endregion
 
