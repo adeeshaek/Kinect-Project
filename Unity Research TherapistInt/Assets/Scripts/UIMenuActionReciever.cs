@@ -86,6 +86,11 @@ public class UIMenuActionReciever : MonoBehaviour
     public GameObject bigGuiTextObject;
 
     /// <summary>
+    /// settings menu
+    /// </summary>
+    public GameObject settingsMenu;
+
+    /// <summary>
     /// selected index
     /// </summary>
     int currentIndex = 0;
@@ -169,6 +174,10 @@ public class UIMenuActionReciever : MonoBehaviour
 
                 case "Pause":
                     playPauseButtonPressed();
+                    break;
+
+                case "Settings":
+                    showSettingsView();
                     break;
 
                 default:
@@ -547,6 +556,19 @@ public class UIMenuActionReciever : MonoBehaviour
     {
         bigGuiTextObject.GetComponent<BigGUIScript>().makeTextDisappear();
     }
+    #endregion
+
+    #region settings menu related methods
+
+    /// <summary>
+    /// shows the settings view
+    /// </summary>
+    public void showSettingsView()
+    {
+        setStatus("Opening Settings Menu");
+        settingsMenu.SetActiveRecursively(true);
+    }
+
     #endregion
 
 }

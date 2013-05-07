@@ -176,6 +176,7 @@
      <Compile Include="Assets\Scripts\UIPanelButton.cs" />
      <Compile Include="Assets\Scripts\UIPanelItemButton.cs" />
      <Compile Include="Assets\Scripts\UISavePanel.cs" />
+     <Compile Include="Assets\Scripts\settingsMenuScript.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\ButtonScript.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\SerializeScript.cs" />
      <Compile Include="Assets\Therapist Interface Assets\Scripts\TranslationLayer.cs" />
