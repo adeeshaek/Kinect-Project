@@ -382,6 +382,8 @@ public class UIMenuActionReciever : MonoBehaviour
     /// </summary>
     public void newButtonPressed()
     {
+        translationLayerObject.GetComponent<TranslationLayer>().NewFile();
+
         setStatus("Created New File");
     }
 
@@ -472,8 +474,11 @@ public class UIMenuActionReciever : MonoBehaviour
     /// <param name="maxFramesIn"></param>
     public void UpdateSlider(int currentFrameIndexIn, int maxFramesIn)
     {
-        float sliderValue = ((float)currentFrameIndexIn / (float)maxFramesIn);
-        Debug.Log(sliderValue);
+        float sliderValue;
+        if (maxFramesIn == 0)
+            sliderValue = 0.0f;
+        else
+            sliderValue = ((float)currentFrameIndexIn / (float)maxFramesIn);
         
         Slider.GetComponent<UISlider>().sliderValue = sliderValue;
         Slider.GetComponent<UISlider>().ForceUpdate();

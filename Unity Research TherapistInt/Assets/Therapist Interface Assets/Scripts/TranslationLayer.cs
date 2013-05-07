@@ -289,6 +289,17 @@ public class TranslationLayer : MonoBehaviour {
         if (playbackList != null)
             backupList.AddRange(playbackList); //copy playbackList to backupList
     }
+
+    /// <summary>
+    /// Creates a new file by clearing the lists already in memory
+    /// </summary>
+    public void NewFile()
+    {
+        StopPlaying();
+        playbackList.Clear();
+        SyncLists();
+        UpdateGUIKPList();
+    }
 #endregion
 
     #region playback related methods
@@ -416,9 +427,12 @@ public class TranslationLayer : MonoBehaviour {
     /// <param name="sliderIndexIn">Index of slider</param>
     public void HandleSliderChange(float sliderIndexIn)
     {
-        float targetFrame = (sliderIndexIn * playbackList.Count);
-        currentFrame = (int)targetFrame;
-        PlayFrame();
+        if (playbackList.Count > 0)
+        {
+            float targetFrame = (sliderIndexIn * playbackList.Count);
+            currentFrame = (int)targetFrame;
+            PlayFrame();
+        }
     }
 
     /// <summary>
@@ -660,7 +674,6 @@ public class TranslationLayer : MonoBehaviour {
     /// </summary>
     public void UpdateGUIKPList()
     {
-        //GameObject.Find(GUIGameObjectName).GetComponent<ButtonScript>().UpdateKPList();
         NGUIReciever.GetComponent<UIMenuActionReciever>().updateKeyPointsList(keypointsList);
     }
 
