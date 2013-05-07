@@ -69,6 +69,17 @@ public class GestureTracker : MonoBehaviour {
     /// </summary>
     public float gestureTrackingThreshold = 0.8f;
 
+    /// <summary>
+    /// length of time, in seconds, the user needs to hold the 
+    /// position to start recording
+    /// </summary>
+    public float gestureTimeThreshold = .5f;
+
+    /// <summary>
+    /// time the user has held the gesture
+    /// </summary>
+    float currentGestureTime;
+
     #region low-level methods
 
     /// <summary>
@@ -108,6 +119,14 @@ public class GestureTracker : MonoBehaviour {
     #endregion
 
     /// <summary>
+    /// decrements the time left to hold the gesture
+    /// </summary>
+    public void decrementGestureTime()
+    {
+        currentGestureTime = currentGestureTime - Time.deltaTime;
+    }
+
+    /// <summary>
     /// checks the pose to see if it is being held by the user
     /// </summary>
     public void listenForGesture()
@@ -121,10 +140,20 @@ public class GestureTracker : MonoBehaviour {
 
         isHoldingPose = CheckForPose(avatarPose, targetPose);
 
-        if (isHoldingPose)
+        if (currentGestureTime < 0.0f)
         {
             gestureSuccesfullyHeld();
             isListeningForGestures = false;
+        }
+
+        else if (isHoldingPose)
+        {
+            decrementGestureTime();
+        }
+
+        else
+        {
+            currentGestureTime = gestureTimeThreshold;
         }
     }
 
@@ -171,6 +200,7 @@ public class GestureTracker : MonoBehaviour {
         isListeningForGestures = true;
         initiateTrackingClone();
         trackingCloneJumpToPose();
+        currentGestureTime = gestureTimeThreshold;
     }
 
     /// <summary>
@@ -183,6 +213,9 @@ public class GestureTracker : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// called when gesture is succesfully held
+    /// </summary>
     void gestureSuccesfullyHeld()
     {
         destroyTrackingClone();
